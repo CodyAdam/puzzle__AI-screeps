@@ -12,7 +12,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     memoryManager.clearCreeps();
     spawnManager.drawSpawning();
-    spawnManager.spawnOnAmount(300);
+    spawnManager.spawnOnAmount(400);
+    spawnManager.neededRole();
+
 
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];

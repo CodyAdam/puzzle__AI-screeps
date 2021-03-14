@@ -1,18 +1,20 @@
 export class spawnManager {
 
     public static spawn(): void {
-        if (!Game.spawns["Spawn1"].spawning || _.size(Game.creeps) < 9) {
+        if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < 9) {
             var role = this.neededRole();
-            var newName = role + Game.time;
-            Game.spawns["Spawn1"].spawnCreep([WORK, WORK, CARRY, MOVE], newName, {
-                memory: {
-                    role: role,
-                    room: Game.spawns["Spawn1"].room,
-                    building: false,
-                    working: false,
-                    upgrading: false
-                },
-            });
+            if (role != "fill") {
+                var newName = role + Game.time;
+                Game.spawns["Spawn1"].spawnCreep([WORK, WORK, CARRY, CARRY, CARRY, MOVE], newName, {
+                    memory: {
+                        role: role,
+                        room: Game.spawns["Spawn1"].room,
+                        building: false,
+                        working: false,
+                        upgrading: false
+                    },
+                });
+            }
         }
     }
     public static spawnOnAmount(amount: number) {
@@ -36,15 +38,15 @@ export class spawnManager {
         }
     }
     public static neededRole(): string {
-        var roles = ["harvester", "upgrader", "builder"];
-        var targetCount = [4, 3, 2];
+        var roles = ["harvester", "builder", "upgrader"];
+        var targetCount = [4, 4, 2];
+        for (var i = 0; i <= roles.length; i++) {
+            var count = _.filter(Game.creeps, (creep) => creep.memory.role == roles[i]).length;
+            console.log(roles[i] + " " + count + "/" + targetCount[i]);
 
-        var needed: any = null;
-        roles.forEach((role, i) => {
-            var count = _.filter(Game.creeps, (creep) => creep.memory.role == role).length;
-            if (count < targetCount[i])
-                return needed;
-        });
-        return roles[0];
+            if (targetCount[i] > count)
+                return roles[i];
+        }
+        return "fill";
     }
 }

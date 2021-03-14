@@ -1,6 +1,7 @@
 import {assert} from "chai";
 import {loop} from "../../src/main";
 import {Game, Memory} from "./mock"
+import {spawnManager} from "../../src/spawnManager";
 
 describe("main", () => {
   before(() => {
@@ -21,5 +22,9 @@ describe("main", () => {
 
   it("should return void when called with no context", () => {
     assert.isUndefined(loop());
+  });
+
+  it("should spawn the correct role", ()=> {
+    assert.isTrue("harverster" == spawnManager.neededRole())
   });
 });
