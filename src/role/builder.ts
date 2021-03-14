@@ -1,5 +1,5 @@
-var roleBuilder = {
-    run: function (creep) {
+export class roleBuilder {
+    public static run(creep: Creep) {
         if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
             creep.say("🔄 harvest");
@@ -22,7 +22,5 @@ var roleBuilder = {
                 creep.moveTo(sources[0], { visualizePathStyle: { stroke: "#ffaa00" } });
             }
         }
-    },
-};
-
-module.exports = roleBuilder;
+    }
+}
