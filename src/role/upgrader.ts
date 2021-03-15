@@ -1,4 +1,4 @@
-export class roleUpgrader {
+export class Upgrader {
     public static run(creep: Creep) {
         if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;

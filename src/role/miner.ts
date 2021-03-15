@@ -11,7 +11,8 @@ export class Harvester {
                     return (
                         (structure.structureType == STRUCTURE_EXTENSION ||
                             structure.structureType == STRUCTURE_SPAWN ||
-                            structure.structureType == STRUCTURE_TOWER) &&
+                            structure.structureType == STRUCTURE_TOWER||
+                            structure.structureType == STRUCTURE_CONTAINER) &&
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
                     );
                 }
@@ -22,5 +23,11 @@ export class Harvester {
                 }
             }
         }
+    }
+
+    public static getFreeSource() {
+        var sources = Game.spawns["Spawn1"].room.find(FIND_SOURCES);
+
+
     }
 }
