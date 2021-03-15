@@ -1,21 +1,18 @@
 import { CreepBehavior } from "./creep";
 
-export class Repairer extends CreepBehavior{
+export class Repairer extends CreepBehavior {
     public static run(creep: Creep) {
-        if (creep.memory.repairing && creep.store.energy == 0) {
-            creep.memory.repairing = false;
+        if ((creep.memory.state == STATE_REPAIRING && creep.store.energy == 0) ||
+            (!(creep.memory.state == STATE_REPAIRING) && creep.store.energy < creep.store.getCapacity())) {
+            creep.memory.state = STATE_REFILLING;
             creep.say('🔄 refill');
         }
-        else if (!creep.memory.repairing && creep.store.energy < creep.store.getCapacity()) {
-            creep.memory.repairing = false;
-            creep.say('🔄 refill');
-        }
-        else if (!creep.memory.repairing && creep.store.energy == creep.store.getCapacity()) {
-            creep.memory.repairing = true;
+        else if (!(creep.memory.state == STATE_REPAIRING) && creep.store.energy == creep.store.getCapacity()) {
+            creep.memory.state = STATE_REPAIRING;
             creep.say('🚧 repair');
         }
 
-        if (creep.memory.repairing) {
+        if (creep.memory.state == STATE_REPAIRING) {
             const targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure: Structure) => {
                     return (

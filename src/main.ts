@@ -3,20 +3,23 @@ import { Harvester } from "role/Harvester";
 import { Upgrader } from "role/Upgrader";
 import { Builder } from "role/Builder";
 import { Repairer } from "role/Repairer";
-import { memoryManager } from "memoryManager";
-import { spawnManager } from "spawnManager";
+import { MemoryManager } from "memoryManager";
+import { SpawnManager } from "spawnManager";
+import cmd from "utils/commands";
 
-// Game.memoryManager = memoryManager;
+global.cmd = cmd;
+global.MINER_PER_SOURCE = 1;
 
-// When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
-// This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
+    console.log(Game.cpu.bucket);
+    if (Game.cpu.bucket == 10000) {
+        Game.cpu.generatePixel();
+    }
 
-    memoryManager.clearCreeps();
-    memoryManager.initRoom(Game.rooms["E7N31"]);
-    spawnManager.drawSpawning();
-    spawnManager.drawRoles();
-    spawnManager.spawnOnAmount(300);
+    MemoryManager.removeMissing();
+    SpawnManager.drawSpawning();
+    SpawnManager.drawRoles();
+    SpawnManager.spawnOnAmount(300);
 
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];
@@ -30,7 +33,15 @@ export const loop = ErrorMapper.wrapLoop(() => {
             Builder.run(creep);
         }
         if (creep.memory.role == "repairer") {
-             Repairer.run(creep);
+            Repairer.run(creep);
         }
     }
 });
+
+global.STATE_MINING = "mining";
+global.STATE_BUILDING = "building";
+global.STATE_UPGRADING = "upgrading";
+global.STATE_IDLE = "idle";
+global.STATE_HAULING = "hauling";
+global.STATE_REPAIRING = "repairing";
+global.STATE_REFILLING = "refilling";

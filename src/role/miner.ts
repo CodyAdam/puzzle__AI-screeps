@@ -1,7 +1,12 @@
 import { CreepBehavior } from "./creep";
 
-export class Harvester extends CreepBehavior{
+export class Harvester extends CreepBehavior {
     public static run(creep: Creep) {
+
+        if (creep.memory.target == null) {
+
+        }
+
         if (creep.store.getFreeCapacity() > 0) { // HARVEST
             var sources = creep.room.find(FIND_SOURCES);
             if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
@@ -13,7 +18,7 @@ export class Harvester extends CreepBehavior{
                     return (
                         (structure.structureType == STRUCTURE_EXTENSION ||
                             structure.structureType == STRUCTURE_SPAWN ||
-                            structure.structureType == STRUCTURE_TOWER||
+                            structure.structureType == STRUCTURE_TOWER ||
                             structure.structureType == STRUCTURE_CONTAINER) &&
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
                     );
@@ -27,9 +32,12 @@ export class Harvester extends CreepBehavior{
         }
     }
 
-    public static getFreeSource() {
-        var sources = Game.spawns["Spawn1"].room.find(FIND_SOURCES);
-
-
+    public static getAvaliableSource(creep: Creep): any {
+        for (var sourceIndex in creep.room.memory.sources) {
+            var source = creep.room.memory.sources[sourceIndex]
+            if (source.miners.length < MINER_PER_SOURCE)
+                return source;
+        }
+        return undefined;
     }
 }

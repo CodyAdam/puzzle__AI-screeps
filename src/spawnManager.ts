@@ -1,21 +1,22 @@
-export class spawnManager {
+export class SpawnManager {
 
     private static roles: string[] = ["harvester", "builder", "upgrader", "repairer"];
     private static targetCount: number[] = [3, 4, 1, 1];
+    private static maxCount: number = 9;
 
     public static spawn(): void {
-        if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < 9) {
+        if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < this.maxCount) {
             var role = this.neededRole();
             if (role != "fill") {
                 var newName = role + (Game.time - 26385007);
-                Game.spawns["Spawn1"].spawnCreep([WORK, CARRY, CARRY, MOVE, MOVE], newName, {
+                var spawn = Game.spawns["Spawn1"];
+                spawn.spawnCreep([WORK, CARRY, CARRY, MOVE, MOVE], newName, {
                     memory: {
+                        target: null,
+                        spawn: spawn,
                         role: role,
                         room: Game.spawns["Spawn1"].room,
-                        building: false,
-                        working: false,
-                        upgrading: false,
-                        repairing: false,
+                        state: STATE_IDLE
                     },
                 });
             }
@@ -50,6 +51,14 @@ export class spawnManager {
                 { align: "right", opacity: 0.5 },
             );
         }
+        var count = _.filter(Game.creeps).length
+        var icon: string = count == this.maxCount ? "✅" : (count < this.maxCount ? "🟥" : "🟨");
+        Game.spawns["Spawn1"].room.visual.text(
+            "creeps  : " + count + "/" + this.maxCount + " " + icon,
+            Game.spawns["Spawn1"].pos.x - 3,
+            Game.spawns["Spawn1"].pos.y + roles.length + 1,
+            { align: "right", opacity: 0.8 },
+        );
     }
     public static neededRole(): string {
         var roles = this.roles;

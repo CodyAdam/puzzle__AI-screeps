@@ -1,7 +1,7 @@
-import {assert} from "chai";
-import {loop} from "../../src/main";
-import {Game, Memory} from "./mock"
-import {spawnManager} from "../../src/spawnManager";
+import { assert } from "chai";
+import { loop } from "../../src/main";
+import { Game, Memory } from "./mock"
+import { SpawnManager } from "../../src/spawnManager";
 
 describe("main", () => {
   before(() => {
@@ -24,7 +24,7 @@ describe("main", () => {
     assert.isUndefined(loop());
   });
 
-  it("should spawn the correct role", ()=> {
-    assert.isTrue("harverster" == spawnManager.neededRole())
+  it("should spawn the correct role", () => {
+    assert.isTrue("harverster" == SpawnManager.neededRole())
   });
 });
