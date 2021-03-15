@@ -1,5 +1,8 @@
 export class spawnManager {
 
+    private static roles: string[] = ["harvester", "builder", "upgrader", "repairer"];
+    private static targetCount: number[] = [2, 1, 5, 1];
+
     public static spawn(): void {
         if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < 9) {
             var role = this.neededRole();
@@ -34,13 +37,24 @@ export class spawnManager {
             );
         }
     }
-    public static neededRole(): string {
-        var roles = ["harvester", "builder", "upgrader", "repairer"];
-        var targetCount = [2, 1, 5, 1];
+    public static drawRoles(): void {
+        var roles = this.roles;
+        var targetCount = this.targetCount;
         for (var i = 0; i < roles.length; i++) {
             var count = _.filter(Game.creeps, (creep) => creep.memory.role == roles[i]).length;
-            console.log(roles[i] + " " + count + "/" + targetCount[i]);
-
+            Game.spawns["Spawn1"].room.visual.text(
+                "📈" + roles[i] + "  : " + count + "/" + targetCount[i],
+                Game.spawns["Spawn1"].pos.x - 10,
+                Game.spawns["Spawn1"].pos.y + i,
+                { align: "right", opacity: 0.5 },
+            );
+        }
+    }
+    public static neededRole(): string {
+        var roles = this.roles;
+        var targetCount = this.targetCount;
+        for (var i = 0; i < roles.length; i++) {
+            var count = _.filter(Game.creeps, (creep) => creep.memory.role == roles[i]).length;
             if (targetCount[i] > count)
                 return roles[i];
         }
