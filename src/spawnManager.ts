@@ -44,7 +44,7 @@ export class spawnManager {
             var count: number = _.filter(Game.creeps, (creep) => creep.memory.role == roles[i]).length;
             var icon: string = count == targetCount[i] ? "✅" : (count < targetCount[i] ? "📉" : "📈");
             Game.spawns["Spawn1"].room.visual.text(
-                icon + " " + roles[i] + "  : " + count + "/" + targetCount[i],
+                roles[i] + "  : " + count + "/" + targetCount[i] + " " + icon,
                 Game.spawns["Spawn1"].pos.x - 10,
                 Game.spawns["Spawn1"].pos.y + i,
                 { align: "right", opacity: 0.5 },
