@@ -1,7 +1,7 @@
 export class spawnManager {
 
     private static roles: string[] = ["harvester", "builder", "upgrader", "repairer"];
-    private static targetCount: number[] = [2, 1, 5, 1];
+    private static targetCount: number[] = [3, 4, 1, 1];
 
     public static spawn(): void {
         if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < 9) {
@@ -42,7 +42,7 @@ export class spawnManager {
         var targetCount = this.targetCount;
         for (var i = 0; i < roles.length; i++) {
             var count: number = _.filter(Game.creeps, (creep) => creep.memory.role == roles[i]).length;
-            var icon: string = count == targetCount[i] ? "✅" : (count < targetCount[i] ? "📉" : "📈");
+            var icon: string = count == targetCount[i] ? "✅" : (count < targetCount[i] ? "🟥" : "🟨");
             Game.spawns["Spawn1"].room.visual.text(
                 roles[i] + "  : " + count + "/" + targetCount[i] + " " + icon,
                 Game.spawns["Spawn1"].pos.x - 3,
