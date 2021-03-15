@@ -7,7 +7,7 @@ export class SpawnManager {
     public static spawn(): void {
         if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < this.maxCount) {
             var role = this.neededRole();
-            if (role != "fill") {
+            if (role) {
                 var newName = role + (Game.time - 26385007);
                 var spawn = Game.spawns["Spawn1"];
                 spawn.spawnCreep([WORK, CARRY, CARRY, MOVE, MOVE], newName, {
@@ -60,7 +60,7 @@ export class SpawnManager {
             { align: "right", opacity: 0.8 },
         );
     }
-    public static neededRole(): string {
+    public static neededRole(): string | null {
         var roles = this.roles;
         var targetCount = this.targetCount;
         for (var i = 0; i < roles.length; i++) {
@@ -68,6 +68,6 @@ export class SpawnManager {
             if (targetCount[i] > count)
                 return roles[i];
         }
-        return roles[1];
+        return null;
     }
 }

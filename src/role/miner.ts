@@ -17,8 +17,6 @@ export class Miner extends CreepBehavior {
             switch (creep.memory.state) {
                 case STATE_MINING:
                     var source: Source | null = Game.getObjectById(creep.memory.targetId);
-                    console.log(source);
-
                     if (source && creep.harvest(source) == ERR_NOT_IN_RANGE)
                         creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
                     break;

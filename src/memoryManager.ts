@@ -9,16 +9,16 @@ export class MemoryManager {
             }
         }
 
-        for (var name in Memory.rooms) {
-            var room = Game.rooms[name];
-            room.memory.sources.forEach(source => {
-                source.minersId.forEach((creep, i) => {
-                    if (creep) {
-                        delete source.minersId[i];
-                    }
-                })
-            });
-        }
+        // for (var name in Memory.rooms) {
+        //     var room = Game.rooms[name];
+        //     room.memory.sources.forEach(source => {
+        //         source.minersId.forEach((creepId, i) => {
+        //             if (Game.getObjectById(creepId)) {
+        //                 delete source.minersId[i];
+        //             }
+        //         })
+        //     });
+        // }
     }
 
     public static clearMemory() {
