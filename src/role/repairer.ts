@@ -1,8 +1,7 @@
-export class Repairer {
+import { CreepBehavior } from "./creep";
+
+export class Repairer extends CreepBehavior{
     public static run(creep: Creep) {
-
-
-
         if (creep.memory.repairing && creep.store.energy == 0) {
             creep.memory.repairing = false;
             creep.say('🔄 refill');
@@ -32,7 +31,7 @@ export class Repairer {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
                     creep.say('🚧 repair');
                 }
-            }
+            } else super.sleep(creep);
         }
         else {
             var sources = creep.room.find(FIND_SOURCES);

@@ -45,7 +45,7 @@ export class spawnManager {
             var icon: string = count == targetCount[i] ? "✅" : (count < targetCount[i] ? "📉" : "📈");
             Game.spawns["Spawn1"].room.visual.text(
                 roles[i] + "  : " + count + "/" + targetCount[i] + " " + icon,
-                Game.spawns["Spawn1"].pos.x - 10,
+                Game.spawns["Spawn1"].pos.x - 3,
                 Game.spawns["Spawn1"].pos.y + i,
                 { align: "right", opacity: 0.5 },
             );

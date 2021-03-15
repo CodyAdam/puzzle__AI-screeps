@@ -1,4 +1,6 @@
-export class Builder {
+import { CreepBehavior } from "./creep";
+
+export class Builder extends CreepBehavior {
     public static run(creep: Creep) {
         if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
@@ -15,7 +17,7 @@ export class Builder {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffffff" } });
                 }
-            }
+            }else super.sleep(creep);
         } else {
             var sources = creep.room.find(FIND_SOURCES);
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {

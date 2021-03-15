@@ -1,4 +1,6 @@
-export class Upgrader {
+import { CreepBehavior } from "./creep";
+
+export class Upgrader extends CreepBehavior {
     public static run(creep: Creep) {
         if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;

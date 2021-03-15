@@ -1,4 +1,6 @@
-export class Harvester {
+import { CreepBehavior } from "./creep";
+
+export class Harvester extends CreepBehavior{
     public static run(creep: Creep) {
         if (creep.store.getFreeCapacity() > 0) { // HARVEST
             var sources = creep.room.find(FIND_SOURCES);
@@ -21,7 +23,7 @@ export class Harvester {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffffff" } });
                 }
-            }
+            } else super.sleep(creep);
         }
     }
 
