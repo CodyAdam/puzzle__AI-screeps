@@ -1,43 +1,44 @@
 import { CreepBehavior } from "./creep";
 
-export class Harvester extends CreepBehavior {
+export class Miner extends CreepBehavior {
     public static run(creep: Creep) {
-
-        if (creep.memory.target == null) {
-
-        }
-
-        if (creep.store.getFreeCapacity() > 0) { // HARVEST
-            var sources = creep.room.find(FIND_SOURCES);
-            if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[1], { visualizePathStyle: { stroke: "#ffaa00" } });
+        if (!creep.memory.targetId) {
+            var sourceId: Id<Source> | null = this.getAvailableSource(creep);
+            if (sourceId) {
+                var source = Game.getObjectById(sourceId);
+                if (source) {
+                    creep.memory.targetId = sourceId;
+                    source.memory.minersId.push(creep.id);
+                    creep.memory.state = STATE_MINING;
+                } else
+                    creep.memory.state = STATE_IDLE;
             }
-        } else { // TRANSFER
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: structure => {
-                    return (
-                        (structure.structureType == STRUCTURE_EXTENSION ||
-                            structure.structureType == STRUCTURE_SPAWN ||
-                            structure.structureType == STRUCTURE_TOWER ||
-                            structure.structureType == STRUCTURE_CONTAINER) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-                    );
-                }
-            });
-            if (targets.length > 0) {
-                if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffffff" } });
-                }
-            } else super.sleep(creep);
+        } else {
+            switch (creep.memory.state) {
+                case STATE_MINING:
+                    var source: Source | null = Game.getObjectById(creep.memory.targetId);
+                    console.log(source);
+
+                    if (source && creep.harvest(source) == ERR_NOT_IN_RANGE)
+                        creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
+                    break;
+                case STATE_IDLE:
+                    creep.memory.state = STATE_MINING;
+                    super.sleep(creep);
+                    break;
+                default:
+                    console.log(creep.name + " not found state : " + creep.memory.state);
+                    break;
+            }
         }
     }
 
-    public static getAvaliableSource(creep: Creep): any {
+    public static getAvailableSource(creep: Creep): Id<Source> | null {
         for (var sourceIndex in creep.room.memory.sources) {
-            var source = creep.room.memory.sources[sourceIndex]
-            if (source.miners.length < MINER_PER_SOURCE)
-                return source;
+            var sourceMemory = creep.room.memory.sources[sourceIndex]
+            if (sourceMemory.minersId.length < MINER_PER_SOURCE)
+                return sourceMemory.id;
         }
-        return undefined;
+        return null;
     }
 }

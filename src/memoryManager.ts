@@ -12,9 +12,9 @@ export class MemoryManager {
         for (var name in Memory.rooms) {
             var room = Game.rooms[name];
             room.memory.sources.forEach(source => {
-                source.miners.forEach((creep, i) => {
+                source.minersId.forEach((creep, i) => {
                     if (creep) {
-                        delete source.miners[i];
+                        delete source.minersId[i];
                     }
                 })
             });
@@ -34,10 +34,9 @@ export class MemoryManager {
         var output = "done";
         if (Memory.spawns[spawn.name]) {
             delete Memory.spawns[spawn.name];
-            output = "overrided"
+            output = "overrided spawn : " + spawn.name;
         }
-        spawn.memory.gameObject = spawn;
-        spawn.memory.creeps = _.filter(Game.creeps, (creep) => { return (creep.memory.spawn == spawn); })
+        spawn.memory.creepsId = _.filter(Game.creeps, (creep) => { return (creep.memory.spawn == spawn); }).map(creep => { return (creep.id); })
         return output;
     }
 
@@ -46,19 +45,20 @@ export class MemoryManager {
         var output = "done";
         if (Memory.spawns[room.name]) {
             delete Memory.spawns[room.name];
-            output = "overrided"
+            output = "overrided room : " + room.name
         }
-        var sources = room.find(FIND_SOURCES);
-        var arr: SourceMemory[] = [];
-        sources.forEach(source => {
+
+        var sourcesMemory: SourceMemory[] = [];
+        room.find(FIND_SOURCES).forEach(source => {
             var sourceMemory: SourceMemory = {
-                gameObject: source,
-                miners: []
+                id: source.id,
+                minersId: []
             };
-            arr.push(sourceMemory);
+            sourcesMemory.push(sourceMemory);
         });
-        room.memory.sources = arr;
-        room.memory.gameObject = room;
+
+        room.memory.sources = sourcesMemory;
+        room.memory.name = room.name;
         return output;
     }
 }

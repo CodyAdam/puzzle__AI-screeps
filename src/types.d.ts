@@ -2,25 +2,30 @@
 // memory extension samples
 interface CreepMemory {
   role: string;
-  target: any;
+  targetId: Id<any> | null;
   room: Room;
   spawn: StructureSpawn;
   state: CreepState;
 }
 
 interface SpawnMemory {
-  gameObject: StructureSpawn;
-  creeps: Creep[];
+  id: Id<StructureSpawn>;
+  creepsId: Id<Creep>[];
+}
+
+interface Source {
+  memory: SourceMemory;
 }
 
 interface RoomMemory {
-  gameObject: Room;
+  id: Id<Room>;
+  name: string;
   sources: SourceMemory[];
 }
 
 interface SourceMemory {
-  gameObject: Source;
-  miners: Creep[];
+  id: Id<Source>;
+  minersId: Id<Creep>[];
 }
 
 interface Memory {

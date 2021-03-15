@@ -2,7 +2,7 @@ export class SpawnManager {
 
     private static roles: string[] = ["harvester", "builder", "upgrader", "repairer"];
     private static targetCount: number[] = [3, 4, 1, 1];
-    private static maxCount: number = 9;
+    private static maxCount: number = 10;
 
     public static spawn(): void {
         if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < this.maxCount) {
@@ -12,7 +12,7 @@ export class SpawnManager {
                 var spawn = Game.spawns["Spawn1"];
                 spawn.spawnCreep([WORK, CARRY, CARRY, MOVE, MOVE], newName, {
                     memory: {
-                        target: null,
+                        targetId: null,
                         spawn: spawn,
                         role: role,
                         room: Game.spawns["Spawn1"].room,

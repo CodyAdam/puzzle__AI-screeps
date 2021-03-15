@@ -6,13 +6,13 @@ import { Repairer } from "role/Repairer";
 import { MemoryManager } from "memoryManager";
 import { SpawnManager } from "spawnManager";
 import cmd from "utils/commands";
+import { Miner } from "role/miner";
 
 global.cmd = cmd;
 global.MINER_PER_SOURCE = 1;
 
 export const loop = ErrorMapper.wrapLoop(() => {
-    console.log(Game.cpu.bucket);
-    if (Game.cpu.bucket == 10000) {
+    if (Game.cpu.bucket >= 10000) {
         Game.cpu.generatePixel();
     }
 
@@ -34,6 +34,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
         if (creep.memory.role == "repairer") {
             Repairer.run(creep);
+        }
+        if (creep.memory.role == "miner") {
+            Miner.run(creep);
         }
     }
 });

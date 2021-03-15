@@ -1,5 +1,4 @@
 export class CreepBehavior {
-
     public static sleep(creep: Creep): void {
         var restPoint = Game.flags["rest"].pos;
         creep.say("😴");

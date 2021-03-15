@@ -2,7 +2,7 @@ import { CreepBehavior } from "./creep";
 
 export class Builder extends CreepBehavior {
     public static run(creep: Creep) {
-        if (!(creep.memory.state == STATE_BUILDING) && creep.store[RESOURCE_ENERGY] == 0) {
+        if (creep.memory.state != STATE_BUILDING && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.state = STATE_BUILDING;
             creep.say("🔄 harvest");
         }
@@ -11,7 +11,7 @@ export class Builder extends CreepBehavior {
             creep.say("🚧 build");
         }
 
-        if (creep.memory.state != STATE_BUILDING) {
+        if (creep.memory.state == STATE_BUILDING) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if (targets.length) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
