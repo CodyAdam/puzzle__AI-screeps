@@ -34,7 +34,7 @@ export class Miner extends CreepBehavior {
                     }
                     break;
                 case STATE_IDLE:
-                    var source: Source | null = Game.getObjectById(creep.memory.target);
+                    var source: Source | null = Game.getObjectById(creep.memory.target.id);
                     if (source) {
                         creep.memory.state = STATE_MINING;
                         this.run(creep);

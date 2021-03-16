@@ -62,18 +62,20 @@ export class Haulier extends CreepBehavior {
             if (room) {
                 var resources: Resource[] | null = room.find(FIND_DROPPED_RESOURCES, {
                     filter: (resource: Resource) => {
-                        var alreadyFound: boolean = false;
-                        _.forEach(Game.creeps, (creep: Creep) => {
-                            if (creep.memory.target == resource.id)
-                                alreadyFound = true;
+                        var alreadyCollected: number = 0;
+                        _.forEach(Game.creeps, (subcreep: Creep) => {
+                            if (subcreep.memory.target == resource.id)
+                                alreadyCollected += subcreep.store.getFreeCapacity();
                         })
                         return (
-                            !alreadyFound && resource.amount > 200
+                            (resource.amount - alreadyCollected) >= (creep.store.getFreeCapacity() - 100)
                         );
                     }
                 });
-                if (resources.length)
+                if (resources.length) {
+
                     return resources[0];
+                }
             }
         }
         return null;
