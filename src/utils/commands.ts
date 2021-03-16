@@ -1,3 +1,4 @@
+import { Miner } from "role/miner";
 import { MemoryManager } from "../memoryManager";
 
 var cmd = {
@@ -20,8 +21,14 @@ var cmd = {
                 break;
             case "builder":
                 bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];
-                output += " miner spawned";
+                output += " builder spawned";
                 if (spawn.room.energyAvailable < 350)
+                    return "not enough energy";
+                break;
+            case "haulier":
+                bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
+                output += " haulier spawned";
+                if (spawn.room.energyAvailable < 400)
                     return "not enough energy";
                 break;
             default:
@@ -46,6 +53,13 @@ var cmd = {
     },
     clearMemory: () => {
         return MemoryManager.clearMemory();
+    }
+    ,
+    getAvailableSource: (room: Room) => {
+        var sourceId: Id<Source> | null = Miner.getAvailableSource(room);
+        if (sourceId) {
+            console.log(Game.getObjectById(sourceId));
+        }
     }
 }
 

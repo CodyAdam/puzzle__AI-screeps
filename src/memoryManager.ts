@@ -9,16 +9,18 @@ export class MemoryManager {
             }
         }
 
-        // for (var name in Memory.rooms) {
-        //     var room = Game.rooms[name];
-        //     room.memory.sources.forEach(source => {
-        //         source.minersId.forEach((creepId, i) => {
-        //             if (Game.getObjectById(creepId)) {
-        //                 delete source.minersId[i];
-        //             }
-        //         })
-        //     });
-        // }
+        for (var name in Memory.rooms) {
+            var room = Game.rooms[name];
+            for (var sourceId in room.memory.sources) {
+                var sourceMem = room.memory.sources[sourceId];
+                sourceMem.minersId = _.filter(sourceMem.minersId, (id) => {
+                    var miner: Creep | null = Game.getObjectById(id)
+                    return (
+                        miner != null && miner.memory.targetId == sourceMem.id
+                    );
+                })
+            }
+        }
     }
 
     public static clearMemory() {
@@ -48,15 +50,17 @@ export class MemoryManager {
             output = "overrided room : " + room.name
         }
 
-        var sourcesMemory: SourceMemory[] = [];
+        var sourcesMemory: {
+            [id: string]: SourceMemory;
+        } = {};
         room.find(FIND_SOURCES).forEach(source => {
-            var sourceMemory: SourceMemory = {
+            sourcesMemory[source.id] = {
                 id: source.id,
-                minersId: []
-            };
-            sourcesMemory.push(sourceMemory);
+                minersId: [] // TODO ADD CREEPS WITH REF
+            }
         });
 
+        // TODO ADD room.memory.creeps
         room.memory.sources = sourcesMemory;
         room.memory.name = room.name;
         return output;

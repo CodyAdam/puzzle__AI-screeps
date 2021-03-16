@@ -7,6 +7,8 @@ import { MemoryManager } from "memoryManager";
 import { SpawnManager } from "spawnManager";
 import cmd from "utils/commands";
 import { Miner } from "role/miner";
+import { Haulier } from "role/haulier";
+import { RoomPainter } from "roomPainter";
 
 global.cmd = cmd;
 global.MINER_PER_SOURCE = 1;
@@ -16,10 +18,30 @@ export const loop = ErrorMapper.wrapLoop(() => {
         Game.cpu.generatePixel();
     }
 
+
+
+    var tower: StructureTower | undefined | null = Game.getObjectById("604fe9fbf201b678adf2c70f");
+    if (tower) {
+        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.hits < structure.hitsMax
+                    && structure.structureType != STRUCTURE_WALL);
+            },
+        });
+        if (closestDamagedStructure) {
+            tower.repair(closestDamagedStructure);
+        }
+        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if (closestHostile) {
+            tower.attack(closestHostile);
+        }
+    }
+
+
+
     MemoryManager.removeMissing();
-    SpawnManager.drawSpawning();
-    SpawnManager.drawRoles();
-    SpawnManager.spawnOnAmount(300);
+    RoomPainter.drawAll();
+    SpawnManager.spawn(Game.spawns["Spawn1"]);
 
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];
@@ -37,6 +59,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
         if (creep.memory.role == "miner") {
             Miner.run(creep);
+        }
+        if (creep.memory.role == "haulier") {
+            Haulier.run(creep);
         }
     }
 });

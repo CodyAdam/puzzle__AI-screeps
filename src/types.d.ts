@@ -20,12 +20,14 @@ interface Source {
 interface RoomMemory {
   id: Id<Room>;
   name: string;
-  sources: SourceMemory[];
+  sources: {
+    [id: string]: SourceMemory;
+  };
 }
 
 interface SourceMemory {
-  id: Id<Source>;
   minersId: Id<Creep>[];
+  id: Id<Source>;
 }
 
 interface Memory {

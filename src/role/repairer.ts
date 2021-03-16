@@ -5,11 +5,9 @@ export class Repairer extends CreepBehavior {
         if ((creep.memory.state == STATE_REPAIRING && creep.store.energy == 0) ||
             (!(creep.memory.state == STATE_REPAIRING) && creep.store.energy < creep.store.getCapacity())) {
             creep.memory.state = STATE_REFILLING;
-            creep.say('🔄 refill');
         }
         else if (!(creep.memory.state == STATE_REPAIRING) && creep.store.energy == creep.store.getCapacity()) {
             creep.memory.state = STATE_REPAIRING;
-            creep.say('🚧 repair');
         }
 
         if (creep.memory.state == STATE_REPAIRING) {
@@ -26,15 +24,12 @@ export class Repairer extends CreepBehavior {
             if (targets.length) {
                 if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
-                    creep.say('🚧 repair');
                 }
             } else super.sleep(creep);
         }
         else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-            }
+            if (this.refillEnergy(creep) == ERR_NOT_FOUND)
+                creep.memory.state = STATE_IDLE;
         }
 
     }

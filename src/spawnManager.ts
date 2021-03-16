@@ -1,65 +1,65 @@
 export class SpawnManager {
 
-    private static roles: string[] = ["harvester", "builder", "upgrader", "repairer"];
-    private static targetCount: number[] = [3, 4, 1, 1];
-    private static maxCount: number = 10;
+    public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier"];
+    public static targetCount: number[] = [2, 2, 2, 0, 3];
+    public static maxCount: number = 15;
 
-    public static spawn(): void {
-        if (!Game.spawns["Spawn1"].spawning && _.size(Game.creeps) < this.maxCount) {
+    public static spawn(spawn: StructureSpawn): string {
+        var output: string = "done";
+        if (!spawn.spawning && _.size(Game.creeps) < this.maxCount) {
             var role = this.neededRole();
             if (role) {
-                var newName = role + (Game.time - 26385007);
-                var spawn = Game.spawns["Spawn1"];
-                spawn.spawnCreep([WORK, CARRY, CARRY, MOVE, MOVE], newName, {
+                var bodyParts: BodyPartConstant[] = [WORK, CARRY, MOVE]
+                switch (role) {
+                    case "miner":
+                        bodyParts = [WORK, WORK, WORK, WORK, WORK, WORK, MOVE];
+                        output += " miner spawned";
+                        if (spawn.room.energyAvailable < 650)
+                            return "not enough energy";
+                        break;
+                    case "builder":
+                        bodyParts = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE];
+                        output += " builder spawned";
+                        if (spawn.room.energyAvailable < 800)
+                            return "not enough energy";
+                        break;
+                    case "upgrader":
+                        bodyParts = [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
+                        output += " upgrader spawned";
+                        if (spawn.room.energyAvailable < 800)
+                            return "not enough energy";
+                        break;
+                    case "repairer":
+                        bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];
+                        output += " repairer spawned";
+                        if (spawn.room.energyAvailable < 350)
+                            return "not enough energy";
+                        break;
+                    case "haulier":
+                        bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+                        output += " haulier spawned";
+                        if (spawn.room.energyAvailable < 600)
+                            return "not enough energy";
+                        break;
+                    default:
+                        return "role not found";
+                }
+                var name = role + (Game.time - 26401107);
+                spawn.spawnCreep(bodyParts, name, {
                     memory: {
                         targetId: null,
                         spawn: spawn,
                         role: role,
-                        room: Game.spawns["Spawn1"].room,
+                        room: spawn.room,
                         state: STATE_IDLE
                     },
                 });
-            }
-        }
+                return output
+            } else output = "not spawned because : no need new unit"
+        } else output = "not spawned because : busy or limit reach";
+        return output;
     }
-    public static spawnOnAmount(amount: number) {
-        if (!Game.spawns["Spawn1"].spawning && Game.spawns["Spawn1"].room.energyAvailable >= amount) {
-            this.spawn();
-        }
-    }
-    public static drawSpawning() {
-        if (Game.spawns["Spawn1"].spawning) {
-            var spawningCreep = Game.creeps[Game.spawns["Spawn1"].spawning.name];
-            Game.spawns["Spawn1"].room.visual.text(
-                "🛠️" + spawningCreep.memory.role,
-                Game.spawns["Spawn1"].pos.x + 1,
-                Game.spawns["Spawn1"].pos.y,
-                { align: "left", opacity: 0.8 },
-            );
-        }
-    }
-    public static drawRoles(): void {
-        var roles = this.roles;
-        var targetCount = this.targetCount;
-        for (var i = 0; i < roles.length; i++) {
-            var count: number = _.filter(Game.creeps, (creep) => creep.memory.role == roles[i]).length;
-            var icon: string = count == targetCount[i] ? "✅" : (count < targetCount[i] ? "🟥" : "🟨");
-            Game.spawns["Spawn1"].room.visual.text(
-                roles[i] + "  : " + count + "/" + targetCount[i] + " " + icon,
-                Game.spawns["Spawn1"].pos.x - 3,
-                Game.spawns["Spawn1"].pos.y + i,
-                { align: "right", opacity: 0.5 },
-            );
-        }
-        var count = _.filter(Game.creeps).length
-        var icon: string = count == this.maxCount ? "✅" : (count < this.maxCount ? "🟥" : "🟨");
-        Game.spawns["Spawn1"].room.visual.text(
-            "creeps  : " + count + "/" + this.maxCount + " " + icon,
-            Game.spawns["Spawn1"].pos.x - 3,
-            Game.spawns["Spawn1"].pos.y + roles.length + 1,
-            { align: "right", opacity: 0.8 },
-        );
-    }
+
     public static neededRole(): string | null {
         var roles = this.roles;
         var targetCount = this.targetCount;

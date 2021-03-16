@@ -3,12 +3,13 @@ import { CreepBehavior } from "./creep";
 export class Miner extends CreepBehavior {
     public static run(creep: Creep) {
         if (!creep.memory.targetId) {
-            var sourceId: Id<Source> | null = this.getAvailableSource(creep);
+            var sourceId: Id<Source> | null = this.getAvailableSource(creep.room);
+
             if (sourceId) {
                 var source = Game.getObjectById(sourceId);
                 if (source) {
                     creep.memory.targetId = sourceId;
-                    source.memory.minersId.push(creep.id);
+                    creep.room.memory.sources[sourceId].minersId.push(creep.id);
                     creep.memory.state = STATE_MINING;
                 } else
                     creep.memory.state = STATE_IDLE;
@@ -31,11 +32,11 @@ export class Miner extends CreepBehavior {
         }
     }
 
-    public static getAvailableSource(creep: Creep): Id<Source> | null {
-        for (var sourceIndex in creep.room.memory.sources) {
-            var sourceMemory = creep.room.memory.sources[sourceIndex]
-            if (sourceMemory.minersId.length < MINER_PER_SOURCE)
-                return sourceMemory.id;
+    public static getAvailableSource(room: Room): Id<Source> | null {
+        for (var sourcesId in room.memory.sources) {
+            var sourceMem = room.memory.sources[sourcesId]
+            if (sourceMem.minersId.length < MINER_PER_SOURCE)
+                return sourceMem.id;
         }
         return null;
     }
