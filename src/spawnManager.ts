@@ -1,6 +1,6 @@
 export class SpawnManager {
-  public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier", "claimer"];
-  public static targetCount: number[] = [6, 3, 5, 1, 8, 1];
+  public static roles: string[] = ["miner", "haulier", "upgrader", "repairer", "builder", "claimer"];
+  public static targetCount: number[] = [6, 8, 3, 1, 3, 1];
   public static maxCount = 30;
 
   public static spawn(spawn: StructureSpawn): string {
