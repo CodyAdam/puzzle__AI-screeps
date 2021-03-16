@@ -11,30 +11,31 @@ var cmd = {
     spawnCreep: (spawnName: string, role: string, name: string) => {
         var output = "done";
         var bodyParts: BodyPartConstant[] = []
+        var cost: number = 0;
         var spawn: StructureSpawn = Game.spawns[spawnName];
         switch (role) {
             case "miner":
                 bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE];
-                output += " miner spawned";
-                if (spawn.room.energyAvailable < 550)
-                    return "not enough energy";
+                cost = 550
+                break;
+            case "sprinter":
+                bodyParts = [WORK, CARRY, MOVE, MOVE, MOVE, MOVE];
+                cost = 350
                 break;
             case "builder":
                 bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];
-                output += " builder spawned";
-                if (spawn.room.energyAvailable < 350)
-                    return "not enough energy";
+                cost = 350
                 break;
             case "haulier":
                 bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
-                output += " haulier spawned";
-                if (spawn.room.energyAvailable < 400)
-                    return "not enough energy";
+                cost = 650
                 break;
             default:
                 return "role not found";
         }
-
+        if (spawn.room.energyAvailable < cost)
+            return "not enough energy";
+        output += " " + role + " spawned";
         spawn.spawnCreep(bodyParts, name, {
             memory: {
                 targetId: null,

@@ -30,10 +30,10 @@ export class Builder extends CreepBehavior {
                     creep.memory.state = STATE_REFILLING;
                     this.run(creep);
                 } else {
-                    var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                    if (targets.length) {
-                        if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                            creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffaa00" } });
+                    var target: ConstructionSite | null = this.getConstructionSite(creep);
+                    if (target) {
+                        if (creep.build(target) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
                         }
                     } else {
                         creep.memory.state = STATE_IDLE;
@@ -46,5 +46,16 @@ export class Builder extends CreepBehavior {
                 break;
 
         }
+    }
+
+    public static getConstructionSite(creep: Creep): ConstructionSite | null {
+        for (var roomName in Memory.rooms) {
+            var room: Room = Game.rooms[roomName]
+            if (room) {
+                var targets: ConstructionSite[] | null = room.find(FIND_CONSTRUCTION_SITES)
+                if (targets.length)
+                    return targets[0];
+            }
+        } return null;
     }
 }

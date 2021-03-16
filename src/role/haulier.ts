@@ -4,10 +4,10 @@ export class Haulier extends CreepBehavior {
     public static run(creep: Creep) {
         switch (creep.memory.state) {
             case STATE_IDLE:
-                if (creep.store.getUsedCapacity() != 0 && this.stockEnergy(creep) != ERR_NOT_FOUND) {
+                if (creep.store.getUsedCapacity() != 0 && this.stockEnergy(creep) != ERR_NOT_FOUND) { // GO BANK
                     creep.memory.state = STATE_HAULING;
                     this.run(creep);
-                } else if (creep.store.getFreeCapacity() != 0 && this.getDroppedResource(creep)) {
+                } else if (creep.store.getFreeCapacity() != 0 && this.getDroppedResource(creep)) { // THING FOUND
                     creep.memory.state = STATE_REFILLING;
                     this.run(creep);
                 } else this.sleep(creep);
@@ -17,14 +17,21 @@ export class Haulier extends CreepBehavior {
                     creep.memory.state = STATE_HAULING;
                     this.run(creep);
                 } else { // HAS SOME SLOT FREE
-                    var dropped: Resource | null = this.getDroppedResource(creep);
+                    var dropped: Resource | null;
+                    if (creep.memory.targetId)
+                        dropped = Game.getObjectById(creep.memory.targetId);
+                    else
+                        dropped = this.getDroppedResource(creep);
                     if (dropped) // THERE IS THING ON THE GROUND
                     {
+                        creep.memory.targetId = dropped.id;
                         creep.say("🔍" + dropped.amount);
                         if (creep.pickup(dropped) == ERR_NOT_IN_RANGE)
                             creep.moveTo(dropped, { visualizePathStyle: { stroke: "#ffaa00" } });
+                        else creep.memory.targetId = null;
                     }
                     else { // NOTHING FOUND
+                        creep.memory.targetId = null;
                         creep.memory.state = STATE_HAULING;
                         this.run(creep);
                     }
@@ -50,15 +57,25 @@ export class Haulier extends CreepBehavior {
     }
 
     public static getDroppedResource(creep: Creep): Resource | null {
-        var resource: Resource | null = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
-            filter: (resource: Resource) => {
-                return (
-                    resource.amount > 60
-                );
+        for (var roomName in Memory.rooms) {
+            var room = Game.rooms[roomName];
+            if (room) {
+                var resources: Resource[] | null = room.find(FIND_DROPPED_RESOURCES, {
+                    filter: (resource: Resource) => {
+                        var alreadyFound: boolean = false;
+                        _.forEach(Game.creeps, (creep: Creep) => {
+                            if (creep.memory.targetId == resource.id)
+                                alreadyFound = true;
+                        })
+                        return (
+                            !alreadyFound && resource.amount > 60
+                        );
+                    }
+                });
+                if (resources.length)
+                    return resources[0];
             }
-        });
-        if (resource)
-            return resource;
+        }
         return null;
     }
 }

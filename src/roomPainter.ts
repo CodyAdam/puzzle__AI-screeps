@@ -4,9 +4,16 @@ export class RoomPainter {
     public static drawAll() {
         for (var spawnName in Memory.spawns) {
             var spawn: StructureSpawn = Game.spawns[spawnName];
-            this.drawRoles(spawn);
-            this.drawSpawning(spawn);
-            this.drawSources(spawn.room);
+            if (spawn) {
+                this.drawRoles(spawn);
+                this.drawSpawning(spawn);
+            }
+        }
+        for (var roomName in Memory.rooms) {
+            var room: Room = Game.rooms[roomName];
+            if (room) {
+                this.drawSources(room);
+            }
         }
     }
     public static drawSources(room: Room) {

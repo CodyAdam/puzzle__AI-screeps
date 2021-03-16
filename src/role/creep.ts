@@ -22,7 +22,7 @@ export class CreepBehavior {
     }
 
     public static stockEnergy(creep: Creep): number {
-        var targets = creep.room.find(FIND_STRUCTURES, {
+        var targets = creep.room.find(FIND_MY_STRUCTURES, {
             filter: (structure: AnyStructure) => {
                 return (
                     ((structure.structureType == STRUCTURE_EXTENSION ||
@@ -32,7 +32,7 @@ export class CreepBehavior {
             }
         });
         if (!(targets.length > 0)) {
-            targets = creep.room.find(FIND_STRUCTURES, {
+            targets = creep.room.find(FIND_MY_STRUCTURES, {
                 filter: (structure: AnyStructure) => {
                     return (
                         structure.structureType == STRUCTURE_CONTAINER &&

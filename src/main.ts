@@ -38,8 +38,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
     }
 
+    var joe = Game.creeps["joe"];
+    joe.moveTo(Game.flags["pix"])
 
-    MemoryManager.updateRoom(Game.rooms["E7N31"]);
+    for (var room in Memory.rooms) {
+        MemoryManager.updateRoom(Game.rooms[room]);
+    }
     MemoryManager.removeMissing();
     RoomPainter.drawAll();
     SpawnManager.spawn(Game.spawns["Spawn1"]);
