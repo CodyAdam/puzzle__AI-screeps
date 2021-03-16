@@ -6,7 +6,6 @@ export class Claimer extends CreepBehavior {
         if (flag) {
             if (creep.room == flag.room) {
                 if (creep.room.controller && !creep.room.controller.my) {
-                    console.log(creep.reserveController(creep.room.controller));
                     if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE)
                         creep.moveTo(creep.room.controller);
                 }

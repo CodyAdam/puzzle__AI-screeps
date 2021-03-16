@@ -38,7 +38,7 @@ var cmd = {
         output += " " + role + " spawned";
         spawn.spawnCreep(bodyParts, name, {
             memory: {
-                targetId: null,
+                target: null,
                 spawn: spawn,
                 role: role,
                 room: spawn.room,

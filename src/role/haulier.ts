@@ -18,20 +18,20 @@ export class Haulier extends CreepBehavior {
                     this.run(creep);
                 } else { // HAS SOME SLOT FREE
                     var dropped: Resource | null;
-                    if (creep.memory.targetId)
-                        dropped = Game.getObjectById(creep.memory.targetId);
+                    if (creep.memory.target)
+                        dropped = Game.getObjectById(creep.memory.target);
                     else
                         dropped = this.getDroppedResource(creep);
                     if (dropped) // THERE IS THING ON THE GROUND
                     {
-                        creep.memory.targetId = dropped.id;
+                        creep.memory.target = dropped.id;
                         creep.say("🔍" + dropped.amount);
                         if (creep.pickup(dropped) == ERR_NOT_IN_RANGE)
                             creep.moveTo(dropped, { visualizePathStyle: { stroke: "#ffaa00" } });
-                        else creep.memory.targetId = null;
+                        else creep.memory.target = null;
                     }
                     else { // NOTHING FOUND
-                        creep.memory.targetId = null;
+                        creep.memory.target = null;
                         creep.memory.state = STATE_HAULING;
                         this.run(creep);
                     }
@@ -64,7 +64,7 @@ export class Haulier extends CreepBehavior {
                     filter: (resource: Resource) => {
                         var alreadyFound: boolean = false;
                         _.forEach(Game.creeps, (creep: Creep) => {
-                            if (creep.memory.targetId == resource.id)
+                            if (creep.memory.target == resource.id)
                                 alreadyFound = true;
                         })
                         return (

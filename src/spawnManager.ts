@@ -1,7 +1,7 @@
 export class SpawnManager {
 
     public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier"];
-    public static targetCount: number[] = [6, 3, 2, 1, 5];
+    public static targetCount: number[] = [6, 3, 2, 1, 10];
     public static maxCount: number = 25;
 
     public static spawn(spawn: StructureSpawn): string {
@@ -36,7 +36,7 @@ export class SpawnManager {
                             return "not enough energy";
                         break;
                     case "haulier":
-                        bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+                        bodyParts = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY];
                         output += " haulier spawned";
                         if (spawn.room.energyAvailable < 800)
                             return "not enough energy";
@@ -47,7 +47,7 @@ export class SpawnManager {
                 var name = role + (Game.time - 26401107);
                 spawn.spawnCreep(bodyParts, name, {
                     memory: {
-                        targetId: null,
+                        target: null,
                         spawn: spawn,
                         role: role,
                         room: spawn.room,

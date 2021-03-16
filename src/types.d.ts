@@ -2,7 +2,7 @@
 // memory extension samples
 interface CreepMemory {
   role: string;
-  targetId: Id<any> | null;
+  target: any | null;
   room: Room;
   spawn: StructureSpawn;
   state: CreepState;

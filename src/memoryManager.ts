@@ -59,7 +59,8 @@ export class MemoryManager {
             var miners: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
                 return (
                     creep.memory.role == "miner" &&
-                    creep.memory.targetId == source.id
+                    creep.memory.target &&
+                    creep.memory.target.id == source.id
                 );
             });
             var minersId: Id<Creep>[] = miners.map((creep: Creep) => { return (creep.id); });
