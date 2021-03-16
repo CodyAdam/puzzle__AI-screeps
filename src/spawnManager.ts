@@ -1,7 +1,7 @@
 export class SpawnManager {
 
     public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier"];
-    public static targetCount: number[] = [2, 2, 2, 0, 3];
+    public static targetCount: number[] = [2, 0, 4, 0, 3];
     public static maxCount: number = 15;
 
     public static spawn(spawn: StructureSpawn): string {

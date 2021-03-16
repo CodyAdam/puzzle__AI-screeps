@@ -14,9 +14,9 @@ export class MemoryManager {
             for (var sourceId in room.memory.sources) {
                 var sourceMem = room.memory.sources[sourceId];
                 sourceMem.minersId = _.filter(sourceMem.minersId, (id) => {
-                    var miner: Creep | null = Game.getObjectById(id)
+                    var creep: Creep | null = Game.getObjectById(id)
                     return (
-                        miner != null && miner.memory.targetId == sourceMem.id
+                        creep != null
                     );
                 })
             }
@@ -54,9 +54,16 @@ export class MemoryManager {
             [id: string]: SourceMemory;
         } = {};
         room.find(FIND_SOURCES).forEach(source => {
+            var miners: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
+                return (
+                    creep.memory.role == "miner" &&
+                    creep.memory.targetId == source.id
+                );
+            });
+            var minersId: Id<Creep>[] = miners.map((creep: Creep) => { return (creep.id); });
             sourcesMemory[source.id] = {
                 id: source.id,
-                minersId: [] // TODO ADD CREEPS WITH REF
+                minersId: minersId
             }
         });
 
