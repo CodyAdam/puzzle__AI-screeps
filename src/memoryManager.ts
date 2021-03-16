@@ -71,7 +71,19 @@ export class MemoryManager {
             }
         });
 
+
+        var claimers: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
+            return (
+                creep.memory.role == "claimer" &&
+                creep.memory.target &&
+                room.controller &&
+                creep.memory.target.id == room.controller.id
+            );
+        });
+        var claimersId: Id<Creep>[] = claimers.map((creep: Creep) => { return (creep.id); });
+
         // TODO ADD room.memory.creeps
+        room.memory.claimers = claimersId;
         room.memory.sources = sourcesMemory;
         room.memory.name = room.name;
         return output;

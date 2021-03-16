@@ -20,6 +20,7 @@ interface Source {
 interface RoomMemory {
   id: Id<Room>;
   name: string;
+  claimers: Id<Creep>[];
   sources: {
     [id: string]: SourceMemory;
   };

@@ -1,49 +1,51 @@
 export class SpawnManager {
 
-    public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier"];
-    public static targetCount: number[] = [6, 3, 2, 1, 10];
+    public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier", "claimer"];
+    public static targetCount: number[] = [6, 3, 2, 1, 8, 1];
     public static maxCount: number = 25;
 
     public static spawn(spawn: StructureSpawn): string {
-        var output: string = "done";
+        var output: string = "done : ";
         if (!spawn.spawning && _.size(Game.creeps) < this.maxCount) {
             var role = this.neededRole();
             if (role) {
+                var cost: number = 0;
                 var bodyParts: BodyPartConstant[] = [WORK, CARRY, MOVE]
                 switch (role) {
                     case "miner":
-                        bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE];
+                        bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE, MOVE];
                         output += " miner spawned";
-                        if (spawn.room.energyAvailable < 550)
-                            return "not enough energy";
+                        cost = 700;
                         break;
                     case "builder":
                         bodyParts = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
                         output += " builder spawned";
-                        if (spawn.room.energyAvailable < 800)
-                            return "not enough energy";
+                        cost = 800;
                         break;
                     case "upgrader":
                         bodyParts = [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
                         output += " upgrader spawned";
-                        if (spawn.room.energyAvailable < 800)
-                            return "not enough energy";
+                        cost = 800;
                         break;
                     case "repairer":
                         bodyParts = [WORK, WORK, CARRY, CARRY, MOVE, MOVE];
                         output += " repairer spawned";
-                        if (spawn.room.energyAvailable < 400)
-                            return "not enough energy";
+                        cost = 400;
                         break;
                     case "haulier":
                         bodyParts = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY];
-                        output += " haulier spawned";
-                        if (spawn.room.energyAvailable < 800)
-                            return "not enough energy";
+                        cost = 800;
+                        break;
+                    case "claimer":
+                        bodyParts = [CLAIM, WORK, MOVE, MOVE];
+                        cost = 800;
                         break;
                     default:
                         return "role not found";
                 }
+                if (spawn.room.energyAvailable < cost)
+                    return "not enough energy";
+                output += role + " spawned";
                 var name = role + (Game.time - 26401107);
                 spawn.spawnCreep(bodyParts, name, {
                     memory: {
