@@ -18,9 +18,9 @@ var cmd = {
                 bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE];
                 cost = 550
                 break;
-            case "sprinter":
-                bodyParts = [WORK, CARRY, MOVE, MOVE, MOVE, MOVE];
-                cost = 350
+            case "claimer":
+                bodyParts = [CLAIM, WORK, MOVE, MOVE];
+                cost = 800
                 break;
             case "builder":
                 bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];

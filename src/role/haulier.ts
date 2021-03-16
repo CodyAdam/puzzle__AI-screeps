@@ -68,7 +68,7 @@ export class Haulier extends CreepBehavior {
                                 alreadyFound = true;
                         })
                         return (
-                            !alreadyFound && resource.amount > 60
+                            !alreadyFound && resource.amount > 200
                         );
                     }
                 });

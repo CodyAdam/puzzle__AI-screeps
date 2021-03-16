@@ -1,8 +1,8 @@
 export class SpawnManager {
 
     public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier"];
-    public static targetCount: number[] = [4, 2, 1, 1, 3];
-    public static maxCount: number = 15;
+    public static targetCount: number[] = [6, 3, 2, 1, 5];
+    public static maxCount: number = 25;
 
     public static spawn(spawn: StructureSpawn): string {
         var output: string = "done";
@@ -18,7 +18,7 @@ export class SpawnManager {
                             return "not enough energy";
                         break;
                     case "builder":
-                        bodyParts = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE];
+                        bodyParts = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
                         output += " builder spawned";
                         if (spawn.room.energyAvailable < 800)
                             return "not enough energy";
@@ -36,9 +36,9 @@ export class SpawnManager {
                             return "not enough energy";
                         break;
                     case "haulier":
-                        bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+                        bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
                         output += " haulier spawned";
-                        if (spawn.room.energyAvailable < 600)
+                        if (spawn.room.energyAvailable < 800)
                             return "not enough energy";
                         break;
                     default:

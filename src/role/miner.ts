@@ -13,12 +13,22 @@ export class Miner extends CreepBehavior {
             switch (creep.memory.state) {
                 case STATE_MINING:
                     var source: Source | null = Game.getObjectById(creep.memory.targetId);
-                    if (source && creep.harvest(source) == ERR_NOT_IN_RANGE)
-                        creep.moveTo(source, { visualizePathStyle: { stroke: "#FFFFF0" } });
+                    if (source) {
+
+                        if (source && creep.harvest(source) == ERR_NOT_IN_RANGE)
+                            creep.moveTo(source, { visualizePathStyle: { stroke: "#FFFFF0" } });
+                    } else {
+                        creep.memory.state = STATE_IDLE;
+                        this.run(creep);
+                    }
                     break;
                 case STATE_IDLE:
-                    creep.memory.state = STATE_MINING;
-                    super.sleep(creep);
+                    var source: Source | null = Game.getObjectById(creep.memory.targetId);
+                    if (source) {
+                        creep.memory.state = STATE_MINING;
+                        this.run(creep);
+                    } else
+                        super.sleep(creep);
                     break;
                 default:
                     console.log(creep.name + " not found state : " + creep.memory.state);
@@ -29,9 +39,9 @@ export class Miner extends CreepBehavior {
 
     public static getAvailableSourceId(): SourceMemory | null {
         for (var roomName in Memory.rooms) {
-            var room: Room = Game.rooms[roomName];
-            for (var sourcesId in room.memory.sources) {
-                var sourceMem = room.memory.sources[sourcesId]
+            var roomMem: RoomMemory = Memory.rooms[roomName];
+            for (var sourcesId in roomMem.sources) {
+                var sourceMem = roomMem.sources[sourcesId]
                 if (sourceMem.minersId.length < MINER_PER_SOURCE)
                     return sourceMem;
             }

@@ -28,6 +28,7 @@ interface RoomMemory {
 interface SourceMemory {
   minersId: Id<Creep>[];
   id: Id<Source>;
+  pos: RoomPosition;
 }
 
 interface Memory {

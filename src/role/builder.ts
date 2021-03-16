@@ -11,7 +11,7 @@ export class Builder extends CreepBehavior {
                     } else super.sleep(creep);
                 } else { // has energy
                     var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                    if (targets.length) { // there is things to do
+                    if (targets) { // there is things to do
                         creep.memory.state = STATE_BUILDING;
                         this.run(creep);
                     } else  // nothing to do

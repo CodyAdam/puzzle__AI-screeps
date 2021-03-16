@@ -9,6 +9,7 @@ import cmd from "utils/commands";
 import { Miner } from "role/miner";
 import { Haulier } from "role/haulier";
 import { RoomPainter } from "roomPainter";
+import { Claimer } from "role/claimer";
 
 global.cmd = cmd;
 global.MINER_PER_SOURCE = 1;
@@ -38,11 +39,13 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
     }
 
-    var joe = Game.creeps["joe"];
-    joe.moveTo(Game.flags["pix"])
+    // var joe = Game.creeps["joe"];
+    // joe.moveTo(Game.flags["joe"])
 
-    for (var room in Memory.rooms) {
-        MemoryManager.updateRoom(Game.rooms[room]);
+    for (var roomName in Memory.rooms) {
+        var room: Room = Game.rooms[roomName];
+        if (room)
+            MemoryManager.updateRoom(room);
     }
     MemoryManager.removeMissing();
     RoomPainter.drawAll();
@@ -67,6 +70,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
         if (creep.memory.role == "haulier") {
             Haulier.run(creep);
+        }
+        if (creep.memory.role == "claimer") {
+            Claimer.run(creep);
         }
     }
 });
