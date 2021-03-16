@@ -3,10 +3,10 @@ import { MemoryManager } from "../memoryManager";
 
 var cmd = {
     initSpawn: (spawnName: string) => {
-        return MemoryManager.initSpawn(Game.spawns[spawnName]);
+        return MemoryManager.updateSpawn(Game.spawns[spawnName]);
     },
     initRoom: (roomName: string) => {
-        return MemoryManager.initRoom(Game.rooms[roomName]);
+        return MemoryManager.updateRoom(Game.rooms[roomName]);
     },
     spawnCreep: (spawnName: string, role: string, name: string) => {
         var output = "done";
@@ -53,13 +53,6 @@ var cmd = {
     },
     clearMemory: () => {
         return MemoryManager.clearMemory();
-    }
-    ,
-    getAvailableSource: (room: Room) => {
-        var sourceId: Id<Source> | null = Miner.getAvailableSource(room);
-        if (sourceId) {
-            console.log(Game.getObjectById(sourceId));
-        }
     }
 }
 

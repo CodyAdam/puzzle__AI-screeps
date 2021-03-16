@@ -20,6 +20,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
 
 
+
     var tower: StructureTower | undefined | null = Game.getObjectById("604fe9fbf201b678adf2c70f");
     if (tower) {
         var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -38,7 +39,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
 
 
-
+    MemoryManager.updateRoom(Game.rooms["E7N31"]);
     MemoryManager.removeMissing();
     RoomPainter.drawAll();
     SpawnManager.spawn(Game.spawns["Spawn1"]);

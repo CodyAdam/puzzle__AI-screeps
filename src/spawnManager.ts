@@ -1,7 +1,7 @@
 export class SpawnManager {
 
     public static roles: string[] = ["miner", "builder", "upgrader", "repairer", "haulier"];
-    public static targetCount: number[] = [2, 0, 4, 0, 3];
+    public static targetCount: number[] = [2, 1, 4, 1, 3];
     public static maxCount: number = 15;
 
     public static spawn(spawn: StructureSpawn): string {
@@ -30,9 +30,9 @@ export class SpawnManager {
                             return "not enough energy";
                         break;
                     case "repairer":
-                        bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];
+                        bodyParts = [WORK, WORK, CARRY, CARRY, MOVE, MOVE];
                         output += " repairer spawned";
-                        if (spawn.room.energyAvailable < 350)
+                        if (spawn.room.energyAvailable < 400)
                             return "not enough energy";
                         break;
                     case "haulier":

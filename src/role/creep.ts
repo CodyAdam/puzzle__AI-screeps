@@ -25,10 +25,10 @@ export class CreepBehavior {
         var targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure: AnyStructure) => {
                 return (
-                    (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_TOWER) &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
+                    ((structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN) &&
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0) || (
+                        structure.structureType == STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 500));
             }
         });
         if (!(targets.length > 0)) {

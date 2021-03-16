@@ -12,9 +12,6 @@ export class RoomPainter {
     public static drawSources(room: Room) {
         for (var sourceId in room.memory.sources) {
             var sourceMem = room.memory.sources[sourceId];
-            console.log(sourceMem);
-            console.log(sourceMem.minersId.length);
-
             var source = Game.getObjectById(sourceMem.id);
             if (source) {
                 var icon: string = sourceMem.minersId.length == global.MINER_PER_SOURCE ? "✅" : (sourceMem.minersId.length < global.MINER_PER_SOURCE ? "🟥" : "🟨");

@@ -29,7 +29,7 @@ export class Repairer extends CreepBehavior {
         }
         else {
             if (this.refillEnergy(creep) == ERR_NOT_FOUND)
-                creep.memory.state = STATE_IDLE;
+                creep.memory.state = STATE_REPAIRING;
         }
 
     }

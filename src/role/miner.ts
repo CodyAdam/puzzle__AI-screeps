@@ -2,13 +2,11 @@ import { CreepBehavior } from "./creep";
 
 export class Miner extends CreepBehavior {
     public static run(creep: Creep) {
-
         if (!creep.memory.targetId) {
             var sourceId: string | null = this.getAvailableSource(creep.room);
             if (sourceId) {
                 var sourceMem: SourceMemory = creep.room.memory.sources[sourceId];
                 creep.memory.targetId = sourceMem.id;
-                creep.room.memory.sources[sourceId].minersId.push(creep.id);
                 creep.memory.state = STATE_MINING;
             } else
                 creep.memory.state = STATE_IDLE;

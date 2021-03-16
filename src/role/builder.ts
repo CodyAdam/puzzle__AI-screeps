@@ -4,12 +4,12 @@ export class Builder extends CreepBehavior {
     public static run(creep: Creep) {
         switch (creep.memory.state) {
             case STATE_IDLE:
-                if (creep.store.getFreeCapacity() != 0) { // not full
+                if (creep.store.getUsedCapacity() == 0) { // Empty
                     if (this.availableEnergyStructures(creep).length > 0) {
                         creep.memory.state = STATE_REFILLING;
                         this.run(creep);
                     } else super.sleep(creep);
-                } else { // full
+                } else { // has energy
                     var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
                     if (targets.length) { // there is things to do
                         creep.memory.state = STATE_BUILDING;

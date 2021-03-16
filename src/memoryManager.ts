@@ -32,7 +32,7 @@ export class MemoryManager {
         Memory.log = {}
     }
 
-    public static initSpawn(spawn: StructureSpawn): string {
+    public static updateSpawn(spawn: StructureSpawn): string {
         var output = "done";
         if (Memory.spawns[spawn.name]) {
             delete Memory.spawns[spawn.name];
@@ -43,7 +43,7 @@ export class MemoryManager {
     }
 
 
-    public static initRoom(room: Room): string {
+    public static updateRoom(room: Room): string {
         var output = "done";
         if (Memory.spawns[room.name]) {
             delete Memory.spawns[room.name];
