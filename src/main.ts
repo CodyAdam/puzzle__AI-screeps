@@ -24,7 +24,11 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   var tower: StructureTower | undefined | null = Game.getObjectById("604fe9fbf201b678adf2c70f");
   if (tower) {
-    var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+    let closestHostile: Creep | null = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
+      filter: (creep: Creep) => {
+        return (!creep.name.toLowerCase().includes("scala"));
+      }
+    });
     if (closestHostile) {
       tower.attack(closestHostile);
     } else {

@@ -54,7 +54,7 @@ export class SpawnManager {
         const cost = _.sum(bodyParts, (b) => BODYPART_COST[b]);
         if (spawn.room.energyAvailable < cost) return "not enough energy";
         output += role + " spawned";
-        const name: string = role + (Game.time - 26470107);
+        const name: string = role + (Game.time - 26474107) + "Escalade";
         spawn.spawnCreep(bodyParts, name, {
           memory: {
             target: null,
