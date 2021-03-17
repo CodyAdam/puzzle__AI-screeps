@@ -86,7 +86,7 @@ export abstract class Messenger {
     public static move(creep: Creep): void {
         var flagsRoute: Flag[] = _.filter(Game.flags, (flag: Flag) => {
             return (
-                flag.name.includes("messenger")
+                flag.name.toLowerCase().includes("messenger")
             );
         })
         flagsRoute = _.sortBy(flagsRoute, (flag: Flag) => { return (flag.name); })
