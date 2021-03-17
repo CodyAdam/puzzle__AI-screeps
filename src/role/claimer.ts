@@ -2,6 +2,7 @@ import { CreepBehavior } from "./creep";
 
 export class Claimer extends CreepBehavior {
     public static run(creep: Creep) {
+        super.run(creep);
         var flag: Flag = Game.flags["toClaim"];
         if (flag) {
             if (creep.room == flag.room) {

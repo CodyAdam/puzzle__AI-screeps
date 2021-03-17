@@ -2,6 +2,7 @@ import { CreepBehavior } from "./creep";
 
 export class Haulier extends CreepBehavior {
     public static run(creep: Creep) {
+        super.run(creep);
         switch (creep.memory.state) {
             case STATE_IDLE:
                 if (creep.store.getUsedCapacity() != 0 && this.stockEnergy(creep) != ERR_NOT_FOUND) { // GO BANK

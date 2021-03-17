@@ -1,4 +1,6 @@
-export abstract class Messenger {
+import { CreepBehavior } from "./creep";
+
+export abstract class Messenger extends CreepBehavior {
     public static rickRollLyrics: string[] = ["We're no",
         "strangers",
         "to love",
@@ -37,6 +39,7 @@ export abstract class Messenger {
         "👌😎✌"]
 
     public static run(creep: Creep): void {
+        super.run(creep);
         if (!creep.memory.target) {
             creep.memory.target = { tick: 0, flagTick: 0 };
             this.run(creep);
@@ -69,7 +72,9 @@ export abstract class Messenger {
             if (target.x == creep.pos.x && target.y == creep.pos.y && target.roomName == creep.pos.roomName) {
                 creep.memory.target = { tick: creep.memory.target.tick, flagTick: creep.memory.target.flagTick + 1 };
             }
-            creep.moveTo(flagsRoute[creep.memory.target.flagTick % flagsRoute.length], { visualizePathStyle: { stroke: "#fcf803" } })
+            console.log(flagsRoute[creep.memory.target.flagTick % flagsRoute.length].pos);
+
+            creep.moveTo(flagsRoute[0], { visualizePathStyle: { stroke: "#fcf803" } })
         }
     }
 }

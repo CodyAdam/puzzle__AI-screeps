@@ -2,6 +2,7 @@ import { CreepBehavior } from "./creep";
 
 export class Miner extends CreepBehavior {
     public static run(creep: Creep) {
+        super.run(creep);
         if (!creep.memory.target) {
             var sourceMem: SourceMemory | null = this.getAvailableSourceId();
             if (sourceMem) {

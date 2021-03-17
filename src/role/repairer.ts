@@ -2,6 +2,7 @@ import { CreepBehavior } from "./creep";
 
 export class Repairer extends CreepBehavior {
     public static run(creep: Creep) {
+        super.run(creep);
         if ((creep.memory.state == STATE_REPAIRING && creep.store.energy == 0) ||
             (!(creep.memory.state == STATE_REPAIRING) && creep.store.energy < creep.store.getCapacity())) {
             creep.memory.state = STATE_REFILLING;

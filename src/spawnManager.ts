@@ -60,7 +60,7 @@ export class SpawnManager {
             target: null,
             spawn,
             role,
-            room: spawn.room,
+            pos: spawn.pos,
             state: STATE_IDLE
           }
         });

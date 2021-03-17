@@ -3,8 +3,8 @@
 interface CreepMemory {
   role: string;
   target: any | null;
-  room: Room;
   spawn: StructureSpawn;
+  pos: RoomPosition;
   state: CreepState;
 }
 

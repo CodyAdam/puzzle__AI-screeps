@@ -1,4 +1,9 @@
 export class CreepBehavior {
+    public static run(creep: Creep) {
+        let creepMem: CreepMemory = creep.memory;
+        creepMem.pos = creep.pos;
+        creep.memory = creepMem;
+    }
     public static sleep(creep: Creep): void {
         var restPoint = Game.flags["rest"].pos;
         creep.say("💤");

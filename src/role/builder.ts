@@ -2,6 +2,7 @@ import { CreepBehavior } from "./creep";
 
 export class Builder extends CreepBehavior {
     public static run(creep: Creep) {
+        super.run(creep);
         switch (creep.memory.state) {
             case STATE_IDLE:
                 if (creep.store.getUsedCapacity() == 0) { // Empty

@@ -41,7 +41,7 @@ var cmd = {
                 target: null,
                 spawn: spawn,
                 role: role,
-                room: spawn.room,
+                pos: spawn.pos,
                 state: STATE_IDLE
             },
         });
