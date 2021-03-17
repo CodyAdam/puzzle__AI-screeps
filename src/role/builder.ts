@@ -10,7 +10,7 @@ export class Builder extends CreepBehavior {
                         this.run(creep);
                     } else super.sleep(creep);
                 } else { // has energy
-                    var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                    var targets: ConstructionSite<BuildableStructureConstant> | null = this.getConstructionSite(creep);
                     if (targets) { // there is things to do
                         creep.memory.state = STATE_BUILDING;
                         this.run(creep);
@@ -30,7 +30,7 @@ export class Builder extends CreepBehavior {
                     creep.memory.state = STATE_REFILLING;
                     this.run(creep);
                 } else {
-                    var target: ConstructionSite | null = this.getConstructionSite(creep);
+                    var target: ConstructionSite<BuildableStructureConstant> | null = this.getConstructionSite(creep);
                     if (target) {
                         if (creep.build(target) == ERR_NOT_IN_RANGE) {
                             creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
@@ -48,11 +48,11 @@ export class Builder extends CreepBehavior {
         }
     }
 
-    public static getConstructionSite(creep: Creep): ConstructionSite | null {
+    public static getConstructionSite(creep: Creep): ConstructionSite<BuildableStructureConstant> | null {
         for (var roomName in Memory.rooms) {
             var room: Room = Game.rooms[roomName]
             if (room) {
-                var targets: ConstructionSite[] | null = room.find(FIND_CONSTRUCTION_SITES)
+                var targets: ConstructionSite<BuildableStructureConstant>[] | null = room.find(FIND_CONSTRUCTION_SITES)
                 if (targets.length)
                     return targets[0];
             }
