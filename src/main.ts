@@ -10,6 +10,7 @@ import { Miner } from "role/miner";
 import { Haulier } from "role/haulier";
 import { RoomPainter } from "roomPainter";
 import { Claimer } from "role/claimer";
+import { Messenger } from "role/messenger";
 
 global.cmd = cmd;
 global.MINER_PER_SOURCE = 1;
@@ -47,8 +48,14 @@ export const loop = ErrorMapper.wrapLoop(() => {
     var room: Room = Game.rooms[roomName];
     if (room) MemoryManager.updateRoom(room);
   }
+
+  console.log("############ Remove Missing  ############");
+
   MemoryManager.removeMissing();
+
+  console.log("############ Paint  ############");
   RoomPainter.drawAll();
+  console.log("############ Update Spawns ############");
   SpawnManager.spawn(Game.spawns["Spawn1"]);
 
   console.log("############ Update Creeps ############");
@@ -77,6 +84,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
     if (creep.memory.role == "claimer") {
       Claimer.run(creep);
+    }
+    if (creep.memory.role == "messenger") {
+      Messenger.run(creep);
     }
   }
 });
