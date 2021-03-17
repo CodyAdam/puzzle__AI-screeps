@@ -5,7 +5,7 @@ export class Upgrader extends CreepBehavior {
         switch (creep.memory.state) {
             case STATE_IDLE:
                 if (creep.store.getFreeCapacity() != 0) { // not full
-                    if (this.availableEnergyStructures(creep).length > 0) {
+                    if (this.closiestEnergyStructure(creep)) {
                         creep.memory.state = STATE_REFILLING;
                         this.run(creep);
                     } else super.sleep(creep);

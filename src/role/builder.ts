@@ -5,7 +5,7 @@ export class Builder extends CreepBehavior {
         switch (creep.memory.state) {
             case STATE_IDLE:
                 if (creep.store.getUsedCapacity() == 0) { // Empty
-                    if (this.availableEnergyStructures(creep).length > 0) {
+                    if (this.closiestEnergyStructure(creep)) {
                         creep.memory.state = STATE_REFILLING;
                         this.run(creep);
                     } else super.sleep(creep);
