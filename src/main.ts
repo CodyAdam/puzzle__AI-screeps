@@ -20,7 +20,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     Game.cpu.generatePixel();
   }
 
-  console.log("############ Update Towers ############");
+  console.log("############ Update Towers ");
 
   var tower: StructureTower | undefined | null = Game.getObjectById("604fe9fbf201b678adf2c70f");
   if (tower) {
@@ -42,27 +42,27 @@ export const loop = ErrorMapper.wrapLoop(() => {
   // var joe = Game.creeps["joe"];
   // joe.moveTo(Game.flags["joe"])
 
-  console.log("############ Update Rooms ############");
+  console.log("############ Update Rooms ");
 
   for (var roomName in Memory.rooms) {
     var room: Room = Game.rooms[roomName];
     if (room) MemoryManager.updateRoom(room);
   }
 
-  console.log("############ Remove Missing  ############");
+  console.log("############ Remove Missing  ");
 
   MemoryManager.removeMissing();
 
-  console.log("############ Paint  ############");
+  console.log("############ Paint  ");
   RoomPainter.drawAll();
-  console.log("############ Update Spawns ############");
+  console.log("############ Update Spawns ");
   SpawnManager.spawn(Game.spawns["Spawn1"]);
 
-  console.log("############ Update Creeps ############");
+  console.log("############ Update Creeps ");
 
   for (var name in Game.creeps) {
     var creep = Game.creeps[name];
-    console.log(creep.name);
+    console.log("### " + creep.name);
 
     if (creep.memory.role == "harvester") {
       Harvester.run(creep);
