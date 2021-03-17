@@ -1,3 +1,4 @@
+import { B } from "blueprint/B";
 import { SpawnManager } from "spawnManager";
 
 export class RoomPainter {
@@ -13,6 +14,15 @@ export class RoomPainter {
             var room: Room = Game.rooms[roomName];
             if (room) {
                 this.drawSources(room);
+            }
+        }
+
+        for (var flagName in Game.flags) {
+            var flag: Flag = Game.flags[flagName];
+            if (flag) {
+                var initial: string = flag.name.slice(0, 1);
+                if (initial && initial == "B")
+                    B.draw(flag);
             }
         }
     }
