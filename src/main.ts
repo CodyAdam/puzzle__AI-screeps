@@ -19,6 +19,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
     Game.cpu.generatePixel();
   }
 
+  console.log("############ Update Towers ############");
+
   var tower: StructureTower | undefined | null = Game.getObjectById("604fe9fbf201b678adf2c70f");
   if (tower) {
     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
@@ -39,6 +41,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
   // var joe = Game.creeps["joe"];
   // joe.moveTo(Game.flags["joe"])
 
+  console.log("############ Update Rooms ############");
+
   for (var roomName in Memory.rooms) {
     var room: Room = Game.rooms[roomName];
     if (room) MemoryManager.updateRoom(room);
@@ -47,8 +51,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
   RoomPainter.drawAll();
   SpawnManager.spawn(Game.spawns["Spawn1"]);
 
+  console.log("############ Update Creeps ############");
+
   for (var name in Game.creeps) {
     var creep = Game.creeps[name];
+    console.log(creep.name);
+
     if (creep.memory.role == "harvester") {
       Harvester.run(creep);
     }
