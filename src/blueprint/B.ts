@@ -14,18 +14,18 @@ export class B {
     public static draw(flag: Flag) {
         const style: PolyStyle = {
             fill: "#fc3903",
-            opacity: 0.2,
+            opacity: 0.075,
             stroke: "#FFFF0f",
             strokeWidth: 0.1,
-            lineStyle: "dashed"
+            lineStyle: "dotted"
         }
         var room: Room | undefined = flag.room;
         if (room)
             room.visual.rect(
-                flag.pos.x - this.center.x,
-                flag.pos.y - this.center.y,
-                this.patern[0].length - 1,
-                this.patern.length - 1,
+                flag.pos.x - this.center.x - 0.5,
+                flag.pos.y - this.center.y - 0.5,
+                this.patern[0].length,
+                this.patern.length,
                 style)
     }
 }
