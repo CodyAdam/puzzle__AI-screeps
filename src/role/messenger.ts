@@ -40,6 +40,7 @@ export abstract class Messenger extends CreepBehavior {
 
     public static run(creep: Creep): void {
         super.run(creep);
+
         if (!creep.memory.target) {
             creep.memory.target = { tick: 0, flagTick: 0 };
             this.run(creep);
@@ -56,25 +57,33 @@ export abstract class Messenger extends CreepBehavior {
     }
 
     public static incrementTick(creep: Creep): void {
-        if (creep.memory.target)
-            creep.memory.target = { tick: creep.memory.target.tick + 1, flagTick: creep.memory.target.flagTick };
+        if (creep.memory.target) {
+            let creepMem = creep.memory.target
+            creepMem.tick += 1
+            creep.memory.target = creepMem;
+        }
     }
 
     public static move(creep: Creep): void {
         var flagsRoute: Flag[] = _.filter(Game.flags, (flag: Flag) => {
             return (
-                flag.name.toLowerCase().includes("messenger")
+                flag.name.toLowerCase().includes((creep.memory.target.arrived) ? "mesloop" : "mespath")
             );
         })
+        if (!creep.memory.target.arrived && creep.memory.target.flagTick >= flagsRoute.length - 1) {
+            let creepMem = creep.memory.target
+            creepMem.arrived = true
+            creep.memory.target = creepMem;
+        }
         flagsRoute = _.sortBy(flagsRoute, (flag: Flag) => { return (flag.name); })
         if (flagsRoute.length && creep.memory.target.flagTick != undefined && creep.memory.target.flagTick != null) {
             let target: RoomPosition = flagsRoute[creep.memory.target.flagTick % flagsRoute.length].pos
             if (target.x == creep.pos.x && target.y == creep.pos.y && target.roomName == creep.pos.roomName) {
-                creep.memory.target = { tick: creep.memory.target.tick, flagTick: creep.memory.target.flagTick + 1 };
+                let creepMem = creep.memory.target
+                creepMem.flagTick += 1
+                creep.memory.target = creepMem;
             }
-            console.log(flagsRoute[creep.memory.target.flagTick % flagsRoute.length].pos);
-
-            creep.moveTo(flagsRoute[0], { visualizePathStyle: { stroke: "#fcf803" } })
+            creep.moveTo(flagsRoute[creep.memory.target.flagTick % flagsRoute.length], { visualizePathStyle: { stroke: "#fcf803" } })
         }
     }
 }
