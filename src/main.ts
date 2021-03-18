@@ -22,8 +22,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   console.log("############ Update Towers ");
 
-  var tower: StructureTower | undefined | null = Game.getObjectById("604fe9fbf201b678adf2c70f");
-  if (tower) {
+  var tower: StructureTower | undefined | null = Game.getObjectById("6052b2958464bc3c4dbed973");
+  if (tower && tower.attack && tower.repair) {
     let closestHostile: Creep | null = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
       filter: (creep: Creep) => {
         return (!creep.name.toLowerCase().includes("scala"));

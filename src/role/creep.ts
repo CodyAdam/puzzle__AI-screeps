@@ -56,16 +56,28 @@ export class CreepBehavior {
     }
 
     public static closiestEnergyStructure(creep: Creep): StructureContainer | StructureStorage | Ruin | Tombstone | null {
-        let targets: AnyStructure[] | null = creep.room.find(FIND_STRUCTURES, {
+        let storables: AnyStructure[] | null = creep.room.find(FIND_STRUCTURES, {
             filter: (structure: AnyStructure) => {
                 return (
-                    ((structure instanceof StructureContainer ||
-                        structure instanceof StructureStorage || structure instanceof Ruin || structure instanceof Tombstone) &&
-                        structure.store[RESOURCE_ENERGY] > 0)
+                    (structure.structureType == STRUCTURE_CONTAINER ||
+                        structure.structureType == STRUCTURE_STORAGE) &&
+                    structure.store[RESOURCE_ENERGY] > 0
                 );
             }
         });
-        targets = _.sortBy(targets, (structure: AnyStructure) => { return (creep.pos.findPathTo(structure).length); })
+        let ruins: Ruin[] | null = creep.room.find(FIND_RUINS, {
+            filter: (ruin: Ruin) => {
+                return (ruin.store[RESOURCE_ENERGY] > 0);
+            }
+        });
+        let tombstones: Tombstone[] | null = creep.room.find(FIND_TOMBSTONES, {
+            filter: (tombstone: Tombstone) => {
+                return (tombstone.store[RESOURCE_ENERGY] > 0);
+            }
+        });
+
+        let targets = (tombstones.length ?
+            _.sortBy(tombstones, (structure: RoomObject) => { return (creep.pos.findPathTo(structure).length); }) : (ruins.length ? _.sortBy(ruins, (structure: RoomObject) => { return (creep.pos.findPathTo(structure).length); }) : _.sortBy(storables, (structure: RoomObject) => { return (creep.pos.findPathTo(structure).length); })))
         if (targets && (targets[0] instanceof StructureContainer ||
             targets[0] instanceof StructureStorage || targets[0] instanceof Ruin || targets[0] instanceof Tombstone)) {
             return targets[0];
