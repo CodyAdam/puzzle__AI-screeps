@@ -5,6 +5,7 @@ global.cmd = cmd;
 global.MINER_PER_SOURCE = 1;
 
 global.STATE_MINING = "mining";
+global.STATE_CLAIMING = "claiming";
 global.STATE_BUILDING = "building";
 global.STATE_UPGRADING = "upgrading";
 global.STATE_IDLE = "idle";

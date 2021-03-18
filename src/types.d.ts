@@ -44,6 +44,7 @@ declare namespace NodeJS {
     MINER_PER_SOURCE: number;
 
     STATE_MINING: STATE_MINING;
+    STATE_CLAIMING: STATE_CLAIMING;
     STATE_BUILDING: STATE_BUILDING;
     STATE_UPGRADING: STATE_UPGRADING;
     STATE_IDLE: STATE_IDLE;
@@ -72,6 +73,7 @@ declare namespace NodeJS {
 declare const MINER_PER_SOURCE: 1;
 
 declare const STATE_MINING: STATE_MINING;
+declare const STATE_CLAIMING: STATE_CLAIMING;
 declare const STATE_BUILDING: STATE_BUILDING;
 declare const STATE_UPGRADING: STATE_UPGRADING;
 declare const STATE_IDLE: STATE_IDLE;
@@ -95,6 +97,7 @@ declare const ROLE_FIGHTER_Poly: ROLE_FIGHTER_Poly;
 declare const ROLE_FIGHTER_SUPPORT: ROLE_FIGHTER_SUPPORT;
 
 type CreepState =
+  | STATE_CLAIMING
   | STATE_BUILDING
   | STATE_MINING
   | STATE_UPGRADING
@@ -104,6 +107,7 @@ type CreepState =
   | STATE_WITHDRAW;
 
 type STATE_MINING = "mining";
+type STATE_CLAIMING = "claiming";
 type STATE_BUILDING = "building";
 type STATE_UPGRADING = "upgrading";
 type STATE_IDLE = "idle";
