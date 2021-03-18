@@ -6,8 +6,11 @@ export abstract class Logistic extends CreepSuper {
         super.run(creep);
         switch (creep.memory.state) {
             case STATE_IDLE:
-                if (creep.room.energyCapacityAvailable == creep.room.energyAvailable)
-                    this.sleep(creep);
+                if (creep.room.energyCapacityAvailable == creep.room.energyAvailable) {
+                    let flag: Flag | null = Game.flags["B1"];
+                    if (flag)
+                        creep.moveTo(flag);
+                }
                 else {
                     if (creep.store.getUsedCapacity() != 0) {
                         creep.memory.state = STATE_DEPOSITE;
