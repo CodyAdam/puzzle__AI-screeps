@@ -62,9 +62,10 @@ export const loop = ErrorMapper.wrapLoop(() => {
   RoomPainter.drawAll();
 
   console.log("############ Update Spawns ");
-  console.log(
-    SpawnManager.spawn(Game.spawns["Spawn1"])
-  );
+
+  let spawn: StructureSpawn | null = Game.spawns["Spawn1"];
+  if (spawn)
+    SpawnManager.spawn(spawn);
 
   console.log("############ Update Creeps ");
 

@@ -58,7 +58,6 @@ export abstract class Logistic extends CreepSuper {
                         structure.structureType == STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 500));
             }
         });
-
         if (!targets.length) {
             targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure: AnyStructure) => {

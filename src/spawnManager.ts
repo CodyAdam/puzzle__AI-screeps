@@ -26,7 +26,7 @@ export class SpawnManager {
             bodyParts = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY];
             break;
           case ROLE_CLAIMER:
-            bodyParts = [CLAIM, WORK, MOVE, MOVE];
+            bodyParts = [CLAIM, MOVE, MOVE];
             break;
           case ROLE_SCOUT:
             bodyParts = [MOVE, MOVE];
