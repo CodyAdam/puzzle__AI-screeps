@@ -1,6 +1,6 @@
 export class SpawnManager {
   public static roles: string[] = ["miner", "haulier", "upgrader", "repairer", "builder", "claimer", "messenger"];
-  public static targetCount: number[] = [6, 8, 3, 1, 3, 1, 0];
+  public static targetCount: number[] = [6, 8, 4, 1, 2, 1, 0];
   public static maxCount = 30;
 
   public static spawn(spawn: StructureSpawn): string {
@@ -14,33 +14,16 @@ export class SpawnManager {
             bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE, MOVE];
             break;
           case "builder":
-            bodyParts = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+            bodyParts = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
             break;
           case "upgrader":
-            bodyParts = [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
+            bodyParts = [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
             break;
           case "repairer":
             bodyParts = [WORK, WORK, CARRY, CARRY, MOVE, MOVE];
             break;
           case "haulier":
-            bodyParts = [
-              MOVE,
-              MOVE,
-              MOVE,
-              MOVE,
-              MOVE,
-              MOVE,
-              CARRY,
-              CARRY,
-              CARRY,
-              CARRY,
-              CARRY,
-              CARRY,
-              CARRY,
-              CARRY,
-              CARRY,
-              CARRY
-            ];
+            bodyParts = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY];
             break;
           case "claimer":
             bodyParts = [CLAIM, WORK, MOVE, MOVE];
