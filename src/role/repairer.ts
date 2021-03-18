@@ -1,11 +1,12 @@
-import { CreepBehavior } from "./creep";
+import { CreepSuper } from "./creepSuper";
 
-export class Repairer extends CreepBehavior {
+export abstract class Repairer extends CreepSuper {
+    public static role: CreepRole = ROLE_REPAIRER;
     public static run(creep: Creep) {
         super.run(creep);
         if ((creep.memory.state == STATE_REPAIRING && creep.store.energy == 0) ||
             (!(creep.memory.state == STATE_REPAIRING) && creep.store.energy < creep.store.getCapacity())) {
-            creep.memory.state = STATE_REFILLING;
+            creep.memory.state = STATE_WITHDRAW;
         }
         else if (!(creep.memory.state == STATE_REPAIRING) && creep.store.energy == creep.store.getCapacity()) {
             creep.memory.state = STATE_REPAIRING;

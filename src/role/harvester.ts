@@ -1,6 +1,7 @@
-import { CreepBehavior } from "./creep";
+import { CreepSuper } from "./creepSuper";
 
-export class Harvester extends CreepBehavior {
+export abstract class Harvester extends CreepSuper {
+    public static role: CreepRole = ROLE_HARVESTER
     public static run(creep: Creep) {
         super.run(creep);
         if (creep.store.getFreeCapacity() > 0) { // HARVEST

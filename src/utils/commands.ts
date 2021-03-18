@@ -22,6 +22,10 @@ var cmd = {
                 bodyParts = [CLAIM, WORK, MOVE, MOVE];
                 cost = 800
                 break;
+            case "harvester":
+                bodyParts = [WORK, CARRY, MOVE];
+                cost = 200
+                break;
             case "builder":
                 bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];
                 cost = 350

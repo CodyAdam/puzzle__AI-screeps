@@ -1,13 +1,19 @@
-import { CreepBehavior } from "./creep";
+import { Builder } from "./Builder";
+import { CreepSuper } from "./creepSuper";
 
-export class Upgrader extends CreepBehavior {
+export abstract class Upgrader extends CreepSuper {
+    public static role: CreepRole = ROLE_UPGRADER;
     public static run(creep: Creep) {
+        if (Builder.getConstructionSite(creep)) {
+            creep.memory.role = "builder";
+            return;
+        }
         super.run(creep);
         switch (creep.memory.state) {
             case STATE_IDLE:
                 if (creep.store.getFreeCapacity() != 0) { // not full
                     if (this.closiestEnergyStructure(creep)) {
-                        creep.memory.state = STATE_REFILLING;
+                        creep.memory.state = STATE_WITHDRAW;
                         this.run(creep);
                     } else super.sleep(creep);
                 } else { // full
@@ -19,7 +25,7 @@ export class Upgrader extends CreepBehavior {
                         super.sleep(creep);
                 }
                 break;
-            case STATE_REFILLING:
+            case STATE_WITHDRAW:
                 if (creep.store.getFreeCapacity() == 0) { // FULL
                     creep.memory.state = STATE_UPGRADING;
                     this.run(creep);
@@ -40,6 +46,10 @@ export class Upgrader extends CreepBehavior {
                         this.run(creep);
                     }
                 }
+                break;
+            case STATE_BUILDING:
+                creep.memory.state = STATE_UPGRADING;
+                this.run(creep);
                 break;
             default:
                 console.log(creep.name + " state not found : " + creep.memory.state);

@@ -57,7 +57,10 @@ export class RoomPainter {
         var roles = SpawnManager.roles;
         var targetCount = SpawnManager.targetCount;
         for (var i = 0; i < roles.length; i++) {
-            var count: number = _.filter(Game.creeps, (creep) => creep.memory.role == roles[i]).length;
+            const count: number = _.filter(Game.creeps, creep => {
+                return ((creep.memory.role == ROLE_BUILDER && roles[i] == ROLE_UPGRADER) ||
+                    creep.memory.role == roles[i]);
+            }).length;
             var icon: string = count == targetCount[i] ? "✅" : (count < targetCount[i] ? "🟥" : "🟨");
             spawn.room.visual.text(
                 roles[i] + "  : " + count + "/" + targetCount[i] + " " + icon,

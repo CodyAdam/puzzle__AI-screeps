@@ -3,25 +3,25 @@ export class MemoryManager {
 
     public static removeMissing() {
         // Automatically delete memory of missing creeps
-        for (var name in Memory.creeps) {
-            if (!Game.creeps[name]) {
-                delete Memory.creeps[name];
+        for (var creepName in Memory.creeps) {
+            if (!Game.creeps[creepName]) {
+                delete Memory.creeps[creepName];
             }
         }
 
-        for (var name in Memory.rooms) {
-            var room = Game.rooms[name];
-            if (room) {
-                for (var sourceId in room.memory.sources) {
-                    var sourceMem = room.memory.sources[sourceId];
-                    sourceMem.minersId = _.filter(sourceMem.minersId, (id) => {
-                        var creep: Creep | null = Game.getObjectById(id)
-                        return (
-                            creep != null
-                        );
-                    })
-                }
+        // delete missing miners
+        for (var roomName in Memory.rooms) {
+            var roomMem: RoomMemory = Memory.rooms[roomName];
+            for (var sourceId in roomMem.sources) {
+                var sourceMem = roomMem.sources[sourceId];
+                sourceMem.minersId = _.filter(sourceMem.minersId, (id) => {
+                    var creep: Creep | null = Game.getObjectById(id)
+                    return (
+                        creep != null
+                    );
+                })
             }
+
         }
     }
 

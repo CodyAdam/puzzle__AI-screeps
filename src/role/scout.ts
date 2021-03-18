@@ -1,43 +1,7 @@
-import { CreepBehavior } from "./creep";
+import { CreepSuper } from "./creepSuper";
 
-export abstract class Messenger extends CreepBehavior {
-    public static rickRollLyrics: string[] = ["We're no",
-        "strangers",
-        "to love",
-        "You know",
-        "the rules",
-        "and so do",
-        "I! 🖤",
-        "*heavy",
-        "breathing*",
-        "Never",
-        "gonna",
-        "give you",
-        "up 😎",
-        "Never",
-        "gonna",
-        "let you",
-        "down ⏬",
-        "Never",
-        "gonna run",
-        "around",
-        "and",
-        "desert",
-        "you 👌",
-        "Never",
-        "gonna",
-        "make you",
-        "cry 🙈",
-        "Never",
-        "gonna say",
-        "goodbye 🙉",
-        "Never",
-        "gonna",
-        "tell a",
-        "lie and",
-        "hurt you!",
-        "👌😎✌"]
-
+export abstract class Scout extends CreepSuper {
+    public static role: CreepRole = ROLE_SCOUT;
     public static run(creep: Creep): void {
         super.run(creep);
 
@@ -86,4 +50,41 @@ export abstract class Messenger extends CreepBehavior {
             creep.moveTo(flagsRoute[creep.memory.target.flagTick % flagsRoute.length], { visualizePathStyle: { stroke: "#fcf803" } })
         }
     }
+
+    public static rickRollLyrics: string[] = ["We're no",
+        "strangers",
+        "to love",
+        "You know",
+        "the rules",
+        "and so do",
+        "I! 🖤",
+        "*heavy",
+        "breathing*",
+        "Never",
+        "gonna",
+        "give you",
+        "up 😎",
+        "Never",
+        "gonna",
+        "let you",
+        "down ⏬",
+        "Never",
+        "gonna run",
+        "around",
+        "and",
+        "desert",
+        "you 👌",
+        "Never",
+        "gonna",
+        "make you",
+        "cry 🙈",
+        "Never",
+        "gonna say",
+        "goodbye 🙉",
+        "Never",
+        "gonna",
+        "tell a",
+        "lie and",
+        "hurt you!",
+        "👌😎✌"]
 }

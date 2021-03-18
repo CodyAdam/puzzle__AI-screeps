@@ -1,13 +1,14 @@
-import { CreepBehavior } from "./creep";
+import { CreepSuper } from "./creepSuper";
 
-export class Builder extends CreepBehavior {
+export abstract class Builder extends CreepSuper {
+    public static role: CreepRole = ROLE_BUILDER;
     public static run(creep: Creep) {
         super.run(creep);
         switch (creep.memory.state) {
             case STATE_IDLE:
                 if (creep.store.getUsedCapacity() == 0) { // Empty
                     if (this.closiestEnergyStructure(creep)) {
-                        creep.memory.state = STATE_REFILLING;
+                        creep.memory.state = STATE_WITHDRAW;
                         this.run(creep);
                     } else super.sleep(creep);
                 } else { // has energy
@@ -16,10 +17,10 @@ export class Builder extends CreepBehavior {
                         creep.memory.state = STATE_BUILDING;
                         this.run(creep);
                     } else  // nothing to do
-                        super.sleep(creep);
+                        creep.memory.role = "upgrader";
                 }
                 break;
-            case STATE_REFILLING:
+            case STATE_WITHDRAW:
                 if (creep.store.getFreeCapacity() == 0) {
                     creep.memory.state = STATE_BUILDING;
                     this.run(creep);
@@ -28,7 +29,7 @@ export class Builder extends CreepBehavior {
                 break;
             case STATE_BUILDING:
                 if (creep.store.energy == 0) {
-                    creep.memory.state = STATE_REFILLING;
+                    creep.memory.state = STATE_WITHDRAW;
                     this.run(creep);
                 } else {
                     var target: ConstructionSite<BuildableStructureConstant> | null = this.getConstructionSite(creep);
@@ -41,6 +42,10 @@ export class Builder extends CreepBehavior {
                         this.run(creep);
                     }
                 }
+                break;
+            case STATE_UPGRADING:
+                creep.memory.state = STATE_BUILDING;
+                this.run(creep);
                 break;
             default:
                 console.log(creep.name + " state not found : " + creep.memory.state);

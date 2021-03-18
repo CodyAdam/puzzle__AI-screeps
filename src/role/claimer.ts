@@ -1,6 +1,7 @@
-import { CreepBehavior } from "./creep";
+import { CreepSuper } from "./creepSuper";
 
-export class Claimer extends CreepBehavior {
+export abstract class Claimer extends CreepSuper {
+    public static role: CreepRole = ROLE_CLAIMER;
     public static run(creep: Creep) {
         super.run(creep);
         var flag: Flag = Game.flags["toClaim"];

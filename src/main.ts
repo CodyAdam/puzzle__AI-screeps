@@ -1,19 +1,20 @@
+import "utils/constants"
 import { ErrorMapper } from "utils/ErrorMapper";
+
+import { MemoryManager } from "memoryManager";
+import { SpawnManager } from "spawnManager";
+
 import { Harvester } from "role/Harvester";
 import { Upgrader } from "role/Upgrader";
 import { Builder } from "role/Builder";
 import { Repairer } from "role/Repairer";
-import { MemoryManager } from "memoryManager";
-import { SpawnManager } from "spawnManager";
-import cmd from "utils/commands";
 import { Miner } from "role/miner";
-import { Haulier } from "role/haulier";
+import { Carrier } from "role/carrier";
 import { RoomPainter } from "roomPainter";
 import { Claimer } from "role/claimer";
-import { Messenger } from "role/messenger";
+import { Scout } from "role/scout";
+import { Logistic } from "role/logistic";
 
-global.cmd = cmd;
-global.MINER_PER_SOURCE = 1;
 
 export const loop = ErrorMapper.wrapLoop(() => {
   if (Game.cpu.bucket >= 10000) {
@@ -22,11 +23,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   console.log("############ Update Towers ");
 
-  var tower: StructureTower | undefined | null = Game.getObjectById("6052b2958464bc3c4dbed973");
+  var tower: StructureTower | undefined | null = Game.getObjectById("6052b3f926a7a12d4b5cab0e");
   if (tower && tower.attack && tower.repair) {
     let closestHostile: Creep | null = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
       filter: (creep: Creep) => {
         return (!creep.name.toLowerCase().includes("scala"));
+        //return true;
       }
     });
     if (closestHostile) {
@@ -43,8 +45,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
 
-  // var joe = Game.creeps["joe"];
-  // joe.moveTo(Game.flags["joe"])
 
   console.log("############ Update Rooms ");
 
@@ -58,9 +58,13 @@ export const loop = ErrorMapper.wrapLoop(() => {
   MemoryManager.removeMissing();
 
   console.log("############ Paint  ");
+
   RoomPainter.drawAll();
+
   console.log("############ Update Spawns ");
-  SpawnManager.spawn(Game.spawns["Spawn1"]);
+  console.log(
+    SpawnManager.spawn(Game.spawns["Spawn1"])
+  );
 
   console.log("############ Update Creeps ");
 
@@ -68,37 +72,34 @@ export const loop = ErrorMapper.wrapLoop(() => {
     var creep = Game.creeps[name];
     console.log("### " + creep.name);
 
-    if (creep.memory.role == "harvester") {
+    if (creep.memory.role == ROLE_HARVESTER) {
       Harvester.run(creep);
     }
-    if (creep.memory.role == "upgrader") {
+    if (creep.memory.role == ROLE_UPGRADER) {
       Upgrader.run(creep);
     }
-    if (creep.memory.role == "builder") {
+    if (creep.memory.role == ROLE_BUILDER) {
       Builder.run(creep);
     }
-    if (creep.memory.role == "repairer") {
+    if (creep.memory.role == ROLE_REPAIRER) {
       Repairer.run(creep);
     }
-    if (creep.memory.role == "miner") {
+    if (creep.memory.role == ROLE_MINER) {
       Miner.run(creep);
     }
-    if (creep.memory.role == "haulier") {
-      Haulier.run(creep);
+    if (creep.memory.role == ROLE_CARRIER) {
+      Carrier.run(creep);
     }
-    if (creep.memory.role == "claimer") {
+    if (creep.memory.role == ROLE_CLAIMER) {
       Claimer.run(creep);
     }
-    if (creep.memory.role == "messenger") {
-      Messenger.run(creep);
+    if (creep.memory.role == ROLE_SCOUT) {
+      Scout.run(creep);
+    }
+    if (creep.memory.role == ROLE_LOGISTIC) {
+      Logistic.run(creep);
     }
   }
 });
 
-global.STATE_MINING = "mining";
-global.STATE_BUILDING = "building";
-global.STATE_UPGRADING = "upgrading";
-global.STATE_IDLE = "idle";
-global.STATE_HAULING = "hauling";
-global.STATE_REPAIRING = "repairing";
-global.STATE_REFILLING = "refilling";
+

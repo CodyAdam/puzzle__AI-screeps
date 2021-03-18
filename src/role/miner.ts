@@ -1,6 +1,7 @@
-import { CreepBehavior } from "./creep";
+import { CreepSuper } from "./creepSuper";
 
-export class Miner extends CreepBehavior {
+export abstract class Miner extends CreepSuper {
+    public static role: CreepRole = ROLE_MINER;
     public static run(creep: Creep) {
         super.run(creep);
         if (!creep.memory.target) {

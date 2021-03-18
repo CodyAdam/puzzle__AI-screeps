@@ -1,4 +1,6 @@
-export class CreepBehavior {
+export abstract class CreepSuper {
+    abstract role: CreepRole;
+
     public static run(creep: Creep) {
         let creepMem: CreepMemory = creep.memory;
         creepMem.pos = creep.pos;
@@ -38,8 +40,7 @@ export class CreepBehavior {
             targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure: AnyStructure) => {
                     return (
-                        (structure.structureType == STRUCTURE_CONTAINER ||
-                            structure.structureType == STRUCTURE_STORAGE)
+                        (structure.structureType == STRUCTURE_STORAGE)
                         &&
                         structure.store.getFreeCapacity() > 0
                     );
@@ -59,8 +60,7 @@ export class CreepBehavior {
         let storables: AnyStructure[] | null = creep.room.find(FIND_STRUCTURES, {
             filter: (structure: AnyStructure) => {
                 return (
-                    (structure.structureType == STRUCTURE_CONTAINER ||
-                        structure.structureType == STRUCTURE_STORAGE) &&
+                    (structure.structureType == STRUCTURE_STORAGE) &&
                     structure.store[RESOURCE_ENERGY] > 0
                 );
             }
