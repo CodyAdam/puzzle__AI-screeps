@@ -34,7 +34,7 @@ export abstract class Logistic extends CreepSuper {
                     this.run(creep);
                 }
                 else if (creep.store[RESOURCE_ENERGY] != 0) {
-                    this.stockEnergy(creep);
+                    this.fillExtensions(creep);
                 } else {
                     creep.memory.state = STATE_WITHDRAW;
                     this.run(creep);
@@ -48,6 +48,34 @@ export abstract class Logistic extends CreepSuper {
     }
 
     public static fillExtensions(creep: Creep) {
+        let targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure: AnyStructure) => {
+                return (
+                    ((structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN) &&
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
+                        structure.my) || (
+                        structure.structureType == STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 500));
+            }
+        });
 
+        if (!targets.length) {
+            targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure: AnyStructure) => {
+                    return (
+                        (structure.structureType == STRUCTURE_STORAGE)
+                        &&
+                        structure.store.getFreeCapacity() > 0
+                    );
+                }
+            });
+        }
+        if (targets.length > 0) {
+            targets = _.sortBy(targets, (structure: AnyStructure) => { return (creep.pos.findPathTo(structure).length); })
+            if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffffff" } });
+            }
+            return OK;
+        } else return ERR_NOT_FOUND;
     }
 }
