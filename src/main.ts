@@ -34,8 +34,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
     if (closestHostile) {
       tower.attack(closestHostile);
     } else {
-      var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-        filter: structure => {
+      var closestDamagedStructure: Structure | null = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure: Structure) => {
           return structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL;
         }
       });
