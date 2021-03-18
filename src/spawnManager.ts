@@ -1,13 +1,12 @@
 export class SpawnManager {
   public static roles: string[] = [ROLE_LOGISTIC, ROLE_MINER, ROLE_CARRIER, ROLE_UPGRADER, ROLE_REPAIRER, ROLE_CLAIMER, ROLE_SCOUT];
-  public static targetCount: number[] = [1, 6, 8, 5, 1, 1, 0];
+  public static targetCount: number[] = [1, 6, 8, 8, 1, 1, 0];
   public static maxCount = 30;
 
   public static spawn(spawn: StructureSpawn): string {
     let output = "done : ";
     if (!spawn.spawning && _.size(Game.creeps) < this.maxCount) {
       let role: string | null = this.neededRole();
-      console.log(role);
       if (role) {
         let bodyParts: BodyPartConstant[] = [WORK, CARRY, MOVE];
         switch (role) {
@@ -15,10 +14,10 @@ export class SpawnManager {
             bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE, MOVE];
             break;
           case ROLE_UPGRADER:
-            bodyParts = [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+            bodyParts = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
             break;
           case ROLE_REPAIRER:
-            bodyParts = [WORK, WORK, CARRY, CARRY, MOVE, MOVE];
+            bodyParts = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
             break;
           case ROLE_CARRIER:
             bodyParts = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY];
@@ -57,7 +56,7 @@ export class SpawnManager {
   public static getUnusedName(role: string): string {
     outer:
     for (let index = 0; index < 100; index++) {
-      let name = role + " " + index + " scala";
+      let name = role + (index ? index : "") + " Scala";
       for (let creepName in Game.creeps) {
         if (creepName == name) {
           continue outer;
