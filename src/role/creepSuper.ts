@@ -36,7 +36,7 @@ export abstract class CreepSuper {
                         structure.structureType == STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 500));
             }
         });
-        if (!(targets.length)) {
+        if (!(targets.length) && !Game.creeps[ROLE_LOGISTIC + " scala"]) {
             targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure: AnyStructure) => {
                     return (
