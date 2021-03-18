@@ -5,7 +5,7 @@ export abstract class Miner extends CreepSuper {
     public static run(creep: Creep) {
         super.run(creep);
         if (!creep.memory.target) {
-            var sourceMem: SourceMemory | null = this.getAvailableSourceId();
+            var sourceMem: SourceMemory | null = this.getAvailableSourceMem();
             if (sourceMem) {
                 creep.memory.target = sourceMem;
                 creep.memory.state = STATE_MINING;
@@ -50,7 +50,7 @@ export abstract class Miner extends CreepSuper {
         }
     }
 
-    public static getAvailableSourceId(): SourceMemory | null {
+    public static getAvailableSourceMem(): SourceMemory | null {
         for (var roomName in Memory.rooms) {
             var roomMem: RoomMemory = Memory.rooms[roomName];
             for (var sourcesId in roomMem.sources) {

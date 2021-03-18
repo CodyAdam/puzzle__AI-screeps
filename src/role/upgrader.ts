@@ -18,7 +18,7 @@ export abstract class Upgrader extends CreepSuper {
                     } else super.sleep(creep);
                 } else { // full
                     var target: StructureController | undefined = creep.room.controller;
-                    if (target) { // there is things to do
+                    if (target && creep.room.name == creep.memory.spawn.room.name) { // there is things to do
                         creep.memory.state = STATE_UPGRADING;
                         this.run(creep);
                     } else
@@ -38,7 +38,7 @@ export abstract class Upgrader extends CreepSuper {
                     this.run(creep);
                 } else {
                     var target: StructureController | undefined = creep.room.controller;
-                    if (target) {
+                    if (target && creep.room.name == creep.memory.spawn.room.name) {
                         if (creep.upgradeController(target) == ERR_NOT_IN_RANGE)
                             creep.moveTo(target);
                     } else {

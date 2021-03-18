@@ -26,26 +26,27 @@ export abstract class CreepSuper {
 
     public static stockEnergy(creep: Creep): number {
 
-        var targets = creep.room.find(FIND_STRUCTURES, {
+        let targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure: AnyStructure) => {
                 return (
-                    ((structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
-                        structure.my) || (
-                        structure.structureType == STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 500));
+                    (structure.structureType == STRUCTURE_STORAGE)
+                    &&
+                    structure.store.getFreeCapacity() > 0
+                );
             }
         });
-        if (!(targets.length) && !Game.creeps[ROLE_LOGISTIC + " scala"]) {
+        if (!Game.creeps[ROLE_LOGISTIC + " Scala"]) {
             targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure: AnyStructure) => {
                     return (
-                        (structure.structureType == STRUCTURE_STORAGE)
-                        &&
-                        structure.store.getFreeCapacity() > 0
-                    );
+                        ((structure.structureType == STRUCTURE_EXTENSION ||
+                            structure.structureType == STRUCTURE_SPAWN) &&
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
+                            structure.my) || (
+                            structure.structureType == STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 500));
                 }
             });
+
         }
         if (targets.length > 0) {
             targets = _.sortBy(targets, (structure: AnyStructure) => { return (creep.pos.findPathTo(structure).length); })
