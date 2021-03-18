@@ -1,3 +1,4 @@
+import { drop } from "lodash";
 import { CreepSuper } from "./creepSuper";
 
 export abstract class Carrier extends CreepSuper {
@@ -22,8 +23,15 @@ export abstract class Carrier extends CreepSuper {
                     var target: Resource | StructureContainer | null;
                     if (creep.memory.target)
                         target = Game.getObjectById(creep.memory.target);
-                    else
-                        target = this.getDroppedResource(creep) || this.getContainer(creep);
+                    else {
+                        let dropped: Resource | null = this.getDroppedResource(creep);
+                        let container: StructureContainer | null = this.getContainer(creep);
+                        if (dropped && container)
+                            target = creep.pos.findPathTo(dropped).length < creep.pos.findPathTo(container).length ? dropped : container;
+                        else if (dropped)
+                            target = dropped
+                        else target = container;
+                    }
                     if (target) // THERE IS THING ON THE GROUND
                     {
                         creep.memory.target = target.id;
