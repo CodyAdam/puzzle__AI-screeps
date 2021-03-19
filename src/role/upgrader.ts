@@ -1,46 +1,47 @@
-import { Builder } from "./Builder";
+import { Builder } from "./builder";
 import { CreepSuper } from "./creepSuper";
 
 export abstract class Upgrader extends CreepSuper {
     public static role: CreepRole = ROLE_UPGRADER;
-    public static run(creep: Creep) {
-        if (Builder.getConstructionSite(creep)) {
+    public static run(creep: Creep): ScreepsReturnCode {
+        if (Builder.getConstructionSite()) {
             creep.memory.role = "builder";
-            return;
+            return OK;
         }
         super.run(creep);
         switch (creep.memory.state) {
             case STATE_IDLE:
-                if (creep.store.getFreeCapacity() != 0) { // not full
+                if (creep.store.getFreeCapacity() !== 0) {
+                    // not full
                     if (this.closiestEnergyStructure(creep)) {
                         creep.memory.state = STATE_WITHDRAW;
                         this.run(creep);
                     } else super.sleep(creep);
-                } else { // full
-                    var target: StructureController | undefined = creep.room.controller;
-                    if (target && creep.room.name == creep.memory.spawn.room.name) { // there is things to do
+                } else {
+                    // full
+                    const target: StructureController | undefined = creep.room.controller;
+                    if (target && creep.room.name === creep.memory.spawn.room.name) {
+                        // there is things to do
                         creep.memory.state = STATE_UPGRADING;
                         this.run(creep);
-                    } else
-                        super.sleep(creep);
+                    } else super.sleep(creep);
                 }
                 break;
             case STATE_WITHDRAW:
-                if (creep.store.getFreeCapacity() == 0) { // FULL
+                if (creep.store.getFreeCapacity() === 0) {
+                    // FULL
                     creep.memory.state = STATE_UPGRADING;
                     this.run(creep);
-                } else if (super.refillEnergy(creep) == ERR_NOT_FOUND)
-                    creep.memory.state = STATE_IDLE;
+                } else if (super.refillEnergy(creep) === ERR_NOT_FOUND) creep.memory.state = STATE_IDLE;
                 break;
             case STATE_UPGRADING:
-                if (creep.store.getUsedCapacity() == 0) {
+                if (creep.store.getUsedCapacity() === 0) {
                     creep.memory.state = STATE_IDLE;
                     this.run(creep);
                 } else {
-                    var target: StructureController | undefined = creep.room.controller;
-                    if (target && creep.room.name == creep.memory.spawn.room.name) {
-                        if (creep.upgradeController(target) == ERR_NOT_IN_RANGE)
-                            creep.moveTo(target);
+                    const target: StructureController | undefined = creep.room.controller;
+                    if (target && creep.room.name === creep.memory.spawn.room.name) {
+                        if (creep.upgradeController(target) === ERR_NOT_IN_RANGE) creep.moveTo(target);
                     } else {
                         creep.memory.state = STATE_IDLE;
                         this.run(creep);
@@ -55,5 +56,6 @@ export abstract class Upgrader extends CreepSuper {
                 console.log(creep.name + " state not found : " + creep.memory.state);
                 break;
         }
+        return OK;
     }
 }

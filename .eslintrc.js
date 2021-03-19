@@ -29,6 +29,7 @@ module.exports = {
     }
   },
   rules: {
+    "indent": ["error", 4, { "SwitchCase": 1 , "flatTernaryExpressions": true  }],
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-assertions": "error",
     "@typescript-eslint/consistent-type-definitions": "error",
