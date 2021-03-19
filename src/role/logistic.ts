@@ -2,7 +2,6 @@ import { CreepSuper } from "./creepSuper";
 
 export abstract class Logistic extends CreepSuper {
     public static role: CreepRole = ROLE_LOGISTIC;
-
     public static run(creep: Creep): ScreepsReturnCode {
         super.run(creep);
         switch (creep.memory.state) {

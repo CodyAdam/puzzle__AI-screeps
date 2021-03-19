@@ -1,7 +1,4 @@
-import cmd from "./commands";
-
-global.cmd = cmd;
-
+//Constants
 global.MINER_PER_SOURCE = 1;
 
 global.STATE_MINING = "mining";

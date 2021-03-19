@@ -1,4 +1,5 @@
 import "utils/constants";
+
 import { Builder } from "role/builder";
 import { Carrier } from "role/carrier";
 import { Claimer } from "role/claimer";
@@ -13,6 +14,10 @@ import { Scout } from "role/scout";
 import { SpawnManager } from "spawnManager";
 import { Upgrader } from "role/upgrader";
 
+import cmd from "utils/commands";
+
+global.cmd = cmd;
+
 export const loop = ErrorMapper.wrapLoop(() => {
     if (Game.cpu.bucket >= 10000) {
         Game.cpu.generatePixel();
@@ -20,29 +25,33 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     console.log("############ Update Towers ");
 
-    function defendRoom(roomName: string) {
-        const room = Game.rooms[roomName];
-        const hostiles = room.find(FIND_HOSTILE_CREEPS);
-        const towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
-        if (hostiles.length > 0) {
-            const username = hostiles[0].owner.username;
-            Game.notify(`User ${username} spotted in room ${roomName}`);
-            towers.forEach((tower: AnyOwnedStructure) => {
-                if (tower.structureType === STRUCTURE_TOWER) tower.attack(hostiles[0]);
-            });
-        } else if (room.controller) {
-            const closestDamagedStructure: Structure | null = room.controller.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure: Structure) => {
-                    return (
-                        structure.hits < structure.hitsMax &&
-                        structure.structureType !== STRUCTURE_WALL &&
-                        structure.hits < 2000000
-                    );
-                },
-            });
-            if (closestDamagedStructure && towers[0]) {
-                if (towers[0].structureType === STRUCTURE_TOWER && closestDamagedStructure)
-                    towers[0].repair(closestDamagedStructure);
+    function defendRoom(room: Room) {
+        if (room) {
+            const hostiles = room.find(FIND_HOSTILE_CREEPS);
+            const towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
+            if (hostiles.length > 0) {
+                const username = hostiles[0].owner.username;
+                Game.notify(`User ${username} spotted in room ${room.name}`);
+                towers.forEach((tower: AnyOwnedStructure) => {
+                    if (tower.structureType === STRUCTURE_TOWER) tower.attack(hostiles[0]);
+                });
+            } else if (room.controller) {
+                const closestDamagedStructure: Structure | null = room.controller.pos.findClosestByRange(
+                    FIND_STRUCTURES,
+                    {
+                        filter: (structure: Structure) => {
+                            return (
+                                structure.hits < structure.hitsMax &&
+                                structure.structureType !== STRUCTURE_WALL &&
+                                structure.hits < 2000000
+                            );
+                        },
+                    },
+                );
+                if (closestDamagedStructure && towers[0]) {
+                    if (towers[0].structureType === STRUCTURE_TOWER && closestDamagedStructure)
+                        towers[0].repair(closestDamagedStructure);
+                }
             }
         }
     }
@@ -51,15 +60,17 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     for (const roomName in Memory.rooms) {
         const room: Room = Game.rooms[roomName];
-        defendRoom(roomName);
-        if (room) MemoryManager.updateRoom(room);
+        if (room) {
+            defendRoom(room);
+            MemoryManager.updateRoom(room);
+        }
     }
 
     console.log("############ Remove Missing  ");
 
     MemoryManager.cleanAllMemory();
 
-    console.log("############ Paint  ");
+    console.log("############ Paint Visual ");
 
     RoomPainter.drawAll();
 

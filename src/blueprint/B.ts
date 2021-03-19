@@ -40,7 +40,7 @@ export class B {
         [],
         [],
     ];
-    public static center: RoomPosition = new RoomPosition(4, 4, "");
+    public static center: { x: number; y: number } = { x: 4, y: 4 };
     public static draw(flag: Flag): ScreepsReturnCode {
         const style: PolyStyle = {
             fill: "#fc3903",
