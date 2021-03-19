@@ -23,33 +23,37 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   console.log("############ Update Towers ");
 
-  var tower: StructureTower | undefined | null = Game.getObjectById("6052b3f926a7a12d4b5cab0e");
-  if (tower && tower.attack && tower.repair) {
-    let closestHostile: Creep | null = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
-      filter: (creep: Creep) => {
-        return (!creep.name.toLowerCase().includes("scala"));
-        //return true;
-      }
-    });
-    if (closestHostile) {
-      tower.attack(closestHostile);
-    } else {
-      var closestDamagedStructure: Structure | null = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+  function defendRoom(roomName: string) {
+    var room = Game.rooms[roomName];
+    var hostiles = room.find(FIND_HOSTILE_CREEPS);
+    var towers = room.find(
+      FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
+    if (hostiles.length > 0) {
+      var username = hostiles[0].owner.username;
+      Game.notify(`User ${username} spotted in room ${roomName}`);
+      towers.forEach((tower: AnyOwnedStructure) => { if (tower.structureType == STRUCTURE_TOWER) tower.attack(hostiles[0]) });
+    } else if (room.controller) {
+      var closestDamagedStructure: Structure | null = room.controller.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure: Structure) => {
-          return structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL;
+          return (structure.hits < structure.hitsMax &&
+            structure.structureType != STRUCTURE_WALL &&
+            structure.hits < 2000000);
         }
       });
       if (closestDamagedStructure) {
-        tower.repair(closestDamagedStructure);
+        towers.forEach((tower: AnyOwnedStructure) => { if (tower.structureType == STRUCTURE_TOWER && closestDamagedStructure) tower.repair(closestDamagedStructure); });
+
       }
     }
   }
+
 
 
   console.log("############ Update Rooms ");
 
   for (var roomName in Memory.rooms) {
     var room: Room = Game.rooms[roomName];
+    defendRoom(roomName);
     if (room) MemoryManager.updateRoom(room);
   }
 
