@@ -40,8 +40,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
             structure.hits < 2000000);
         }
       });
-      if (closestDamagedStructure) {
-        towers.forEach((tower: AnyOwnedStructure) => { if (tower.structureType == STRUCTURE_TOWER && closestDamagedStructure) tower.repair(closestDamagedStructure); });
+      if (closestDamagedStructure && towers[0]) {
+        if (towers[0].structureType == STRUCTURE_TOWER && closestDamagedStructure) towers[0].repair(closestDamagedStructure);
 
       }
     }
