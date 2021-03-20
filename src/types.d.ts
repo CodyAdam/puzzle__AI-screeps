@@ -1,72 +1,72 @@
 // example declaration file - remove these and add your own custom typings
 // memory extension samples
 interface CreepMemory {
-  role: string;
-  target: any | null;
-  spawn: StructureSpawn;
-  pos: RoomPosition;
-  state: CreepState;
+    role: string;
+    target: any | null;
+    spawn: StructureSpawn;
+    pos: RoomPosition;
+    state: CreepState;
 }
 
 interface SpawnMemory {
-  id: Id<StructureSpawn>;
-  creepsId: Id<Creep>[];
+    id: Id<StructureSpawn>;
+    creepsId: Id<Creep>[];
 }
 
 interface Source {
-  memory: SourceMemory;
+    memory: SourceMemory;
 }
 
 interface RoomMemory {
-  id: Id<Room>;
-  name: string;
-  claimers: Id<Creep>[];
-  sources: {
-    [id: string]: SourceMemory;
-  };
+    id: Id<Room>;
+    name: string;
+    claimers: Id<Creep>[];
+    sources: {
+        [id: string]: SourceMemory;
+    };
 }
 
 interface SourceMemory {
-  minersId: Id<Creep>[];
-  id: Id<Source>;
-  pos: RoomPosition;
+    minersId: Id<Creep>[];
+    id: Id<Source>;
+    pos: RoomPosition;
 }
 
 interface Memory {
-  uuid: number;
-  log: any;
+    uuid: number;
+    log: any;
 }
 
 declare namespace NodeJS {
-  interface Global {
-    cmd: any;
+    interface Global {
+        cmd: any;
 
-    MINER_PER_SOURCE: number;
+        MINER_PER_SOURCE: number;
 
-    STATE_MINING: STATE_MINING;
-    STATE_CLAIMING: STATE_CLAIMING;
-    STATE_BUILDING: STATE_BUILDING;
-    STATE_UPGRADING: STATE_UPGRADING;
-    STATE_IDLE: STATE_IDLE;
-    STATE_DEPOSITE: STATE_DEPOSITE;
-    STATE_REPAIRING: STATE_REPAIRING;
-    STATE_WITHDRAW: STATE_WITHDRAW;
+        STATE_MINING: STATE_MINING;
+        STATE_CLAIMING: STATE_CLAIMING;
+        STATE_BUILDING: STATE_BUILDING;
+        STATE_UPGRADING: STATE_UPGRADING;
+        STATE_IDLE: STATE_IDLE;
+        STATE_DEPOSITE: STATE_DEPOSITE;
+        STATE_REPAIRING: STATE_REPAIRING;
+        STATE_WITHDRAW: STATE_WITHDRAW;
 
-    ROLE_LOGISTIC: ROLE_LOGISTIC;
-    ROLE_CORE: ROLE_CORE;
-    ROLE_MINER: ROLE_MINER;
-    ROLE_UPGRADER: ROLE_UPGRADER;
-    ROLE_CARRIER: ROLE_CARRIER;
-    ROLE_SCOUT: ROLE_SCOUT;
-    ROLE_CLAIMER: ROLE_CLAIMER;
-    ROLE_HARVESTER: ROLE_HARVESTER;
-    ROLE_BUILDER: ROLE_BUILDER;
-    ROLE_REPAIRER: ROLE_REPAIRER;
-    ROLE_FIGHTER_MELEE: ROLE_FIGHTER_MELEE;
-    ROLE_FIGHTER_RANGE: ROLE_FIGHTER_RANGE;
-    ROLE_FIGHTER_Poly: ROLE_FIGHTER_Poly;
-    ROLE_FIGHTER_SUPPORT: ROLE_FIGHTER_SUPPORT;
-  }
+        ROLE_LOGISTIC: ROLE_LOGISTIC;
+        ROLE_CORE: ROLE_CORE;
+        ROLE_MINER: ROLE_MINER;
+        ROLE_UPGRADER: ROLE_UPGRADER;
+        ROLE_CARRIER: ROLE_CARRIER;
+        ROLE_SCOUT: ROLE_SCOUT;
+        ROLE_CLAIMER: ROLE_CLAIMER;
+        ROLE_HARVESTER: ROLE_HARVESTER;
+        ROLE_BUILDER: ROLE_BUILDER;
+        ROLE_REPAIRER: ROLE_REPAIRER;
+        ROLE_FIGHTER_MELEE: ROLE_FIGHTER_MELEE;
+        ROLE_FIGHTER_RANGE: ROLE_FIGHTER_RANGE;
+        ROLE_FIGHTER_POLY: ROLE_FIGHTER_POLY;
+        ROLE_FIGHTER_SUPPORT: ROLE_FIGHTER_SUPPORT;
+    }
 }
 
 // CONSTANTS
@@ -93,18 +93,18 @@ declare const ROLE_BUILDER: ROLE_BUILDER;
 declare const ROLE_REPAIRER: ROLE_REPAIRER;
 declare const ROLE_FIGHTER_MELEE: ROLE_FIGHTER_MELEE;
 declare const ROLE_FIGHTER_RANGE: ROLE_FIGHTER_RANGE;
-declare const ROLE_FIGHTER_Poly: ROLE_FIGHTER_Poly;
+declare const ROLE_FIGHTER_POLY: ROLE_FIGHTER_POLY;
 declare const ROLE_FIGHTER_SUPPORT: ROLE_FIGHTER_SUPPORT;
 
 type CreepState =
-  | STATE_CLAIMING
-  | STATE_BUILDING
-  | STATE_MINING
-  | STATE_UPGRADING
-  | STATE_IDLE
-  | STATE_DEPOSITE
-  | STATE_REPAIRING
-  | STATE_WITHDRAW;
+    | STATE_CLAIMING
+    | STATE_BUILDING
+    | STATE_MINING
+    | STATE_UPGRADING
+    | STATE_IDLE
+    | STATE_DEPOSITE
+    | STATE_REPAIRING
+    | STATE_WITHDRAW;
 
 type STATE_MINING = "mining";
 type STATE_CLAIMING = "claiming";
@@ -116,20 +116,20 @@ type STATE_REPAIRING = "repairing";
 type STATE_WITHDRAW = "withdraw";
 
 type CreepRole =
-  | ROLE_LOGISTIC
-  | ROLE_CORE
-  | ROLE_MINER
-  | ROLE_UPGRADER
-  | ROLE_CARRIER
-  | ROLE_SCOUT
-  | ROLE_CLAIMER
-  | ROLE_HARVESTER
-  | ROLE_BUILDER
-  | ROLE_REPAIRER
-  | ROLE_FIGHTER_MELEE
-  | ROLE_FIGHTER_RANGE
-  | ROLE_FIGHTER_Poly
-  | ROLE_FIGHTER_SUPPORT
+    | ROLE_LOGISTIC
+    | ROLE_CORE
+    | ROLE_MINER
+    | ROLE_UPGRADER
+    | ROLE_CARRIER
+    | ROLE_SCOUT
+    | ROLE_CLAIMER
+    | ROLE_HARVESTER
+    | ROLE_BUILDER
+    | ROLE_REPAIRER
+    | ROLE_FIGHTER_MELEE
+    | ROLE_FIGHTER_RANGE
+    | ROLE_FIGHTER_POLY
+    | ROLE_FIGHTER_SUPPORT;
 
 type ROLE_LOGISTIC = "logistic";
 type ROLE_CORE = "core";
@@ -143,6 +143,6 @@ type ROLE_BUILDER = "builder";
 type ROLE_REPAIRER = "repairer";
 type ROLE_FIGHTER_MELEE = "fighterMelee";
 type ROLE_FIGHTER_RANGE = "fighterRange";
-type ROLE_FIGHTER_Poly = "fighterPoly";
+type ROLE_FIGHTER_POLY = "fighterPoly";
 type ROLE_FIGHTER_SUPPORT = "fighterSupport";
 type ROLE_FIGHTER_CARRIER = "fighterCarrier";

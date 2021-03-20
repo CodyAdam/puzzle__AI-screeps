@@ -1,91 +1,74 @@
+import { CreepSuper } from "role/creepSuper";
+import { Miner } from "role/miner";
 
 export class MemoryManager {
-
-    public static removeMissing() {
-        // Automatically delete memory of missing creeps
-        for (var creepName in Memory.creeps) {
-            if (!Game.creeps[creepName]) {
-                delete Memory.creeps[creepName];
-            }
-        }
-
-        // delete missing miners
-        for (var roomName in Memory.rooms) {
-            var roomMem: RoomMemory = Memory.rooms[roomName];
-            for (var sourceId in roomMem.sources) {
-                var sourceMem = roomMem.sources[sourceId];
-                sourceMem.minersId = _.filter(sourceMem.minersId, (id) => {
-                    var creep: Creep | null = Game.getObjectById(id)
-                    return (
-                        creep != null
-                    );
-                })
-            }
-
-        }
+    public static cleanAllMemory(): ScreepsReturnCode {
+        CreepSuper.cleanMemory();
+        Miner.cleanMemory();
+        return OK;
     }
 
-    public static clearMemory() {
-        Memory.creeps = {}
-        Memory.rooms = {}
-        Memory.spawns = {}
-        Memory.flags = {}
-        Memory.powerCreeps = {}
-        Memory.log = {}
+    public static clearMemory(): ScreepsReturnCode {
+        Memory.creeps = {};
+        Memory.rooms = {};
+        Memory.spawns = {};
+        Memory.flags = {};
+        Memory.powerCreeps = {};
+        Memory.log = {};
+
+        return OK;
     }
 
-    public static updateSpawn(spawn: StructureSpawn): string {
-        var output = "done";
+    public static updateSpawn(spawn: StructureSpawn): ScreepsReturnCode {
         if (Memory.spawns[spawn.name]) {
             delete Memory.spawns[spawn.name];
-            output = "overrided spawn : " + spawn.name;
         }
-        spawn.memory.creepsId = _.filter(Game.creeps, (creep) => { return (creep.memory.spawn == spawn); }).map(creep => { return (creep.id); })
-        return output;
+        spawn.memory.creepsId = _.filter(Game.creeps, (creep) => {
+            return creep.memory.spawn === spawn;
+        }).map((creep) => {
+            return creep.id;
+        });
+        return OK;
     }
 
-
-    public static updateRoom(room: Room): string {
-        var output = "done";
+    public static updateRoom(room: Room): ScreepsReturnCode {
         if (Memory.spawns[room.name]) {
             delete Memory.spawns[room.name];
-            output = "overrided room : " + room.name
         }
 
-        var sourcesMemory: {
+        const sourcesMemory: {
             [id: string]: SourceMemory;
         } = {};
-        room.find(FIND_SOURCES).forEach(source => {
-            var miners: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
-                return (
-                    creep.memory.role == "miner" &&
-                    creep.memory.target &&
-                    creep.memory.target.id == source.id
-                );
+        room.find(FIND_SOURCES).forEach((source) => {
+            const miners: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
+                return creep.memory.role === "miner" && creep.memory.target && creep.memory.target.id === source.id;
             });
-            var minersId: Id<Creep>[] = miners.map((creep: Creep) => { return (creep.id); });
+            const minersId: Id<Creep>[] = miners.map((creep: Creep) => {
+                return creep.id;
+            });
             sourcesMemory[source.id] = {
                 pos: source.pos,
                 id: source.id,
-                minersId: minersId
-            }
+                minersId,
+            };
         });
 
-
-        var claimers: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
+        const claimers: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
             return (
-                creep.memory.role == "claimer" &&
+                creep.memory.role === "claimer" &&
                 creep.memory.target &&
                 room.controller &&
-                creep.memory.target.id == room.controller.id
+                creep.memory.target.id === room.controller.id
             );
         });
-        var claimersId: Id<Creep>[] = claimers.map((creep: Creep) => { return (creep.id); });
+        const claimersId: Id<Creep>[] = claimers.map((creep: Creep) => {
+            return creep.id;
+        });
 
         // TODO ADD room.memory.creeps
         room.memory.claimers = claimersId;
         room.memory.sources = sourcesMemory;
         room.memory.name = room.name;
-        return output;
+        return OK;
     }
 }

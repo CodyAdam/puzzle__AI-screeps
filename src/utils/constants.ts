@@ -1,7 +1,4 @@
-import cmd from "./commands";
-
-global.cmd = cmd;
-
+//Constants
 global.MINER_PER_SOURCE = 1;
 
 global.STATE_MINING = "mining";
@@ -25,5 +22,5 @@ global.ROLE_BUILDER = "builder";
 global.ROLE_REPAIRER = "repairer";
 global.ROLE_FIGHTER_MELEE = "fighterMelee";
 global.ROLE_FIGHTER_RANGE = "fighterRange";
-global.ROLE_FIGHTER_Poly = "fighterPoly";
+global.ROLE_FIGHTER_POLY = "fighterPoly";
 global.ROLE_FIGHTER_SUPPORT = "fighterSupport";
