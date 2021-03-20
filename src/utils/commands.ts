@@ -28,6 +28,10 @@ const cmd = {
                 bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];
                 cost = 350;
                 break;
+            case ROLE_LOGISTIC:
+                bodyParts = [CARRY, CARRY, MOVE, MOVE];
+                cost = 200;
+                break;
             case "haulier":
                 bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
                 cost = 650;
