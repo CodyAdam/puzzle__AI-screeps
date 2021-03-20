@@ -28,7 +28,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     var hostiles = room.find(FIND_HOSTILE_CREEPS);
     var towers = room.find(
       FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
-    if (hostiles.length > 0) {
+    if (hostiles.length) {
       var username = hostiles[0].owner.username;
       Game.notify(`User ${username} spotted in room ${roomName}`);
       towers.forEach((tower: AnyOwnedStructure) => { if (tower.structureType == STRUCTURE_TOWER) tower.attack(hostiles[0]) });
@@ -49,11 +49,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
 
 
+  defendRoom("E7N31");
+
   console.log("############ Update Rooms ");
 
   for (var roomName in Memory.rooms) {
     var room: Room = Game.rooms[roomName];
-    defendRoom(roomName);
     if (room) MemoryManager.updateRoom(room);
   }
 
