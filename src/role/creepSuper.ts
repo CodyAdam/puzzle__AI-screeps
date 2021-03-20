@@ -69,7 +69,7 @@ export abstract class CreepSuper {
                 return creep.pos.findPathTo(structure).length;
             });
             if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffffff" } });
+                return creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffffff" } });
             }
             return OK;
         } else return ERR_NOT_FOUND;

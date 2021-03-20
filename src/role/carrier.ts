@@ -6,6 +6,7 @@ export abstract class Carrier extends CreepSuper {
         super.run(creep);
         switch (creep.memory.state) {
             case STATE_IDLE:
+                console.log("idle");
                 if (creep.store.getUsedCapacity() !== 0 && this.stockEnergy(creep) !== ERR_NOT_FOUND) {
                     // GO BANK
                     creep.memory.state = STATE_DEPOSITE;
@@ -20,6 +21,7 @@ export abstract class Carrier extends CreepSuper {
                 } else this.sleep(creep);
                 break;
             case STATE_WITHDRAW:
+                console.log("with");
                 if (creep.store.getFreeCapacity() === 0) {
                     // FULL
                     creep.memory.state = STATE_DEPOSITE;
@@ -36,44 +38,52 @@ export abstract class Carrier extends CreepSuper {
                                 creep.pos.findPathTo(dropped).length < creep.pos.findPathTo(container).length
                                     ? dropped
                                     : container;
-                            target = dropped;
-                        } else target = container;
-                    }
-                    if (target) {
-                        // THERE IS THING ON THE GROUND
-                        creep.memory.target = target.id;
-                        if (target instanceof StructureContainer) {
-                            creep.say("📦" + target.store.getUsedCapacity().toString());
-                            const minValue: number =
-                                creep.store.getFreeCapacity() > target.store[RESOURCE_ENERGY]
-                                    ? target.store[RESOURCE_ENERGY]
-                                    : creep.store.getFreeCapacity();
-                            if (creep.withdraw(target, RESOURCE_ENERGY, minValue) === ERR_NOT_IN_RANGE)
-                                creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
-                            else creep.memory.target = null;
+                        } else if (container) target = container;
+                        else target = dropped;
+                        if (target) {
+                            // THERE IS THING ON THE GROUND
+                            creep.memory.target = target.id;
+                            if (target instanceof StructureContainer) {
+                                creep.say("📦" + target.store.getUsedCapacity().toString());
+                                const minValue: number =
+                                    creep.store.getFreeCapacity() > target.store[RESOURCE_ENERGY]
+                                        ? target.store[RESOURCE_ENERGY]
+                                        : creep.store.getFreeCapacity();
+                                if (creep.withdraw(target, RESOURCE_ENERGY, minValue) === ERR_NOT_IN_RANGE)
+                                    creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
+                                else creep.memory.target = null;
+                            } else {
+                                creep.say("🔍" + target.amount.toString());
+                                if (creep.pickup(target) === ERR_NOT_IN_RANGE)
+                                    creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
+                                else creep.memory.target = null;
+                            }
                         } else {
-                            creep.say("🔍" + target.amount.toString());
-                            if (creep.pickup(target) === ERR_NOT_IN_RANGE)
-                                creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
-                            else creep.memory.target = null;
+                            // NOTHING FOUND
+                            creep.memory.target = null;
+                            creep.memory.state = STATE_DEPOSITE;
+                            this.run(creep);
                         }
-                    } else {
-                        // NOTHING FOUND
-                        creep.memory.target = null;
-                        creep.memory.state = STATE_DEPOSITE;
-                        this.run(creep);
                     }
                 }
                 break;
             case STATE_DEPOSITE:
+                console.log("dep");
                 creep.say("🔽" + creep.store.getUsedCapacity().toString());
                 if (creep.store.getUsedCapacity() === 0) {
                     creep.memory.state = STATE_IDLE;
                     this.run(creep);
                 } else {
-                    if (this.stockEnergy(creep) === ERR_NOT_FOUND) {
-                        creep.memory.state = STATE_IDLE;
-                        this.run(creep);
+                    const returnCode: ScreepsReturnCode = this.stockEnergy(creep);
+                    switch (returnCode) {
+                        case ERR_NOT_FOUND:
+                            creep.memory.state = STATE_IDLE;
+                            break;
+                        case OK:
+                            break;
+                        default:
+                            console.log(returnCode);
+                            break;
                     }
                 }
                 break;
