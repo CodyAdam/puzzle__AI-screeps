@@ -35,8 +35,8 @@ export class RoomPainter {
                     sourceMem.minersId.length === global.MINER_PER_SOURCE
                         ? "✅"
                         : sourceMem.minersId.length < global.MINER_PER_SOURCE
-                        ? "🟥"
-                        : "🟨";
+                            ? "🟥"
+                            : "🟨";
                 room.visual.text(
                     "⛏ : " + sourceMem.minersId.length.toString() + "/" + global.MINER_PER_SOURCE.toString() + icon,
                     source.pos.x - 1,
@@ -68,7 +68,6 @@ export class RoomPainter {
                     (creep.memory.role === ROLE_BUILDER && roles[i] === ROLE_UPGRADER) || creep.memory.role === roles[i]
                 );
             }).length;
-            totalCount += count;
             const icon: string = count === targetCount[i] ? "✅" : count < targetCount[i] ? "🟥" : "🟨";
             spawn.room.visual.text(
                 roles[i] + "  : " + count.toString() + "/" + targetCount[i].toString() + " " + icon,
