@@ -1,40 +1,58 @@
-// example declaration file - remove these and add your own custom typings
-// memory extension samples
-interface CreepMemory {
-    role: string;
-    target: any | null;
-    spawn: StructureSpawn;
-    pos: RoomPosition;
-    state: CreepState;
-}
-
-interface SpawnMemory {
-    id: Id<StructureSpawn>;
-    creepsId: Id<Creep>[];
+interface Memory {
+    uuid: number;
+    log: any;
+    homes: {
+        [name: string]: HomeMemory;
+    };
 }
 
 interface Source {
     memory: SourceMemory;
 }
 
+interface CreepMemory {
+    id: Id<Creep>;
+    role: string;
+    homeName: string;
+    //updatable
+    state: CreepState;
+    target: MemoryType | null;
+}
+
+interface SpawnMemory {
+    id: Id<StructureSpawn>;
+}
+
 interface RoomMemory {
-    id: Id<Room>;
+    cord: { x: number, y: number };
     name: string;
-    claimers: Id<Creep>[];
-    sources: {
-        [id: string]: SourceMemory;
-    };
+    controller: ControllerMemory;
+    //updatable
+    sources: SourceMemory[];
 }
 
 interface SourceMemory {
-    minersId: Id<Creep>[];
     id: Id<Source>;
     pos: RoomPosition;
+    //updatable
+    miners: CreepMemory[];
 }
 
-interface Memory {
-    uuid: number;
-    log: any;
+
+interface ControllerMemory {
+    id: Id<StructureController>;
+    pos: RoomPosition;
+    //updatable
+    claimers: CreepMemory[];
+}
+
+interface HomeMemory {
+    name: string;
+    roomName: string;
+    homeType: HomeType;
+    spawns: SpawnMemory[];
+    //updatable
+    creeps: CreepMemory[];
 }
 
 declare namespace NodeJS {
@@ -42,6 +60,11 @@ declare namespace NodeJS {
         cmd: any;
 
         MINER_PER_SOURCE: number;
+
+        HOME_B: HOME_B;
+        ROOM_RESERVED: ROOM_RESERVED;
+        ROOM_CLAIMED: ROOM_CLAIMED;
+        ROOM_ATTACKED: ROOM_ATTACKED;
 
         STATE_MINING: STATE_MINING;
         STATE_CLAIMING: STATE_CLAIMING;
@@ -95,6 +118,20 @@ declare const ROLE_FIGHTER_MELEE: ROLE_FIGHTER_MELEE;
 declare const ROLE_FIGHTER_RANGE: ROLE_FIGHTER_RANGE;
 declare const ROLE_FIGHTER_POLY: ROLE_FIGHTER_POLY;
 declare const ROLE_FIGHTER_SUPPORT: ROLE_FIGHTER_SUPPORT;
+
+type HomeType =
+    | HOME_B
+
+type HOME_B = "b"
+
+type RoomState =
+    | ROOM_RESERVED
+    | ROOM_CLAIMED
+    | ROOM_ATTACKED
+
+type ROOM_RESERVED = "reserved";
+type ROOM_CLAIMED = "claimed";
+type ROOM_ATTACKED = "attacked";
 
 type CreepState =
     | STATE_CLAIMING

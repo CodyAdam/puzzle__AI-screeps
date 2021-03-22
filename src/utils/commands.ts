@@ -2,7 +2,7 @@ import { MemoryManager } from "../memoryManager";
 
 const cmd = {
     initSpawn: (spawnName: string): ScreepsReturnCode => {
-        return MemoryManager.updateSpawn(Game.spawns[spawnName]);
+        return MemoryManager.updateHome(Game.spawns[spawnName]);
     },
     initRoom: (roomName: string): ScreepsReturnCode => {
         return MemoryManager.updateRoom(Game.rooms[roomName]);

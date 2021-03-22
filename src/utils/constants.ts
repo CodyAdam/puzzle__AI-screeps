@@ -1,6 +1,12 @@
 //Constants
 global.MINER_PER_SOURCE = 1;
 
+global.HOME_B = "b";
+
+global.ROOM_RESERVED = "reserved";
+global.ROOM_CLAIMED = "claimed";
+global.ROOM_ATTACKED = "attacked";
+
 global.STATE_MINING = "mining";
 global.STATE_CLAIMING = "claiming";
 global.STATE_BUILDING = "building";
