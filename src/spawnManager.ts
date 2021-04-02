@@ -142,7 +142,8 @@ export class SpawnManager {
                 return output;
             } else output = "not spawned because : no need new unit";
         } else output = "not spawned because : busy or limit reach";
-        return output;
+	  
+return output;
     }
 
     public static getUnusedName(role: string): string {
