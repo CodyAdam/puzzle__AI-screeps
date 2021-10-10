@@ -1,6 +1,6 @@
 # About
 
-This repository contain my AI for screeps.
+This repository contains my AI for screeps.
 
 # What is Screeps ?
 
