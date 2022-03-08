@@ -13,7 +13,7 @@ export abstract class Miner extends CreepSuper {
         } else {
             switch (creep.memory.state) {
                 case STATE_MINING: {
-                    const source: Source | null = Game.getObjectById(creep.memory.target.id);
+                    const source: Source | null = Game.getObjectById<Source>(creep.memory.target.id);
                     if (source) {
                         if (source && creep.harvest(source) === ERR_NOT_IN_RANGE)
                             creep.moveTo(source, { visualizePathStyle: { stroke: "#FFFFF0" } });
@@ -35,7 +35,7 @@ export abstract class Miner extends CreepSuper {
                     break;
                 }
                 case STATE_IDLE: {
-                    const source: Source | null = Game.getObjectById(creep.memory.target.id);
+                    const source: Source | null = Game.getObjectById<Source>(creep.memory.target.id);
                     if (source) {
                         creep.memory.state = STATE_MINING;
                         this.run(creep);

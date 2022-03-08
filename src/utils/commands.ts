@@ -7,34 +7,30 @@ const cmd = {
     initRoom: (roomName: string): ScreepsReturnCode => {
         return MemoryManager.updateRoom(Game.rooms[roomName]);
     },
-    spawnCreep: (spawnName: string, role: string, name: string): ScreepsReturnCode => {
+    spawnCreep: (spawnName: string, role: CreepRole, name: string): ScreepsReturnCode => {
         let bodyParts: BodyPartConstant[] = [];
         let cost = 0;
         const spawn: StructureSpawn = Game.spawns[spawnName];
         switch (role) {
-            case "miner":
+            case ROLE_MINER:
                 bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE];
                 cost = 550;
                 break;
-            case "claimer":
+            case ROLE_CLAIMER:
                 bodyParts = [CLAIM, WORK, MOVE, MOVE];
                 cost = 800;
                 break;
-            case "harvester":
+            case ROLE_HARVESTER:
                 bodyParts = [WORK, CARRY, MOVE];
                 cost = 200;
                 break;
-            case "builder":
+            case ROLE_BUILDER:
                 bodyParts = [WORK, WORK, CARRY, CARRY, MOVE];
                 cost = 350;
                 break;
             case ROLE_LOGISTIC:
                 bodyParts = [CARRY, CARRY, MOVE, MOVE];
                 cost = 200;
-                break;
-            case "haulier":
-                bodyParts = [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
-                cost = 650;
                 break;
             default:
                 return ERR_NOT_FOUND;
