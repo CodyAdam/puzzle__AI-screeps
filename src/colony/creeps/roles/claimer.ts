@@ -1,4 +1,4 @@
-import { CreepSuper } from "./creepSuper";
+import { CreepSuper } from "../creepSuper";
 
 export abstract class Claimer extends CreepSuper {
     public static role: CreepRole = ROLE_CLAIMER;
@@ -8,33 +8,33 @@ export abstract class Claimer extends CreepSuper {
         if (flag) {
             if (creep.room === flag.room) {
                 if (creep.room.controller && !creep.room.controller.my) {
-                    creep.memory.target = creep.room.controller;
+                    creep.memory.focus = creep.room.controller;
                     if (creep.reserveController(creep.room.controller) === ERR_NOT_IN_RANGE)
                         creep.moveTo(creep.room.controller);
                 }
             } else {
                 creep.moveTo(flag);
-                creep.memory.target = null;
+                creep.memory.focus = null;
             }
         } else {
             this.sleep(creep);
-            creep.memory.target = null;
+            creep.memory.focus = null;
         }
         return OK;
     }
 
     public static run2(creep: Creep): ScreepsReturnCode {
         super.run(creep);
-        if (!creep.memory.target) {
+        if (!creep.memory.focus) {
             const roomMem: RoomMemory | null = this.getAvailableRoomMem();
             if (roomMem) {
-                creep.memory.target = roomMem;
+                creep.memory.focus = roomMem;
                 creep.memory.state = STATE_CLAIMING;
             } else creep.memory.state = STATE_IDLE;
         } else {
             switch (creep.memory.state) {
                 case STATE_IDLE: {
-                    const source: Source | null = Game.getObjectById(creep.memory.target.id);
+                    const source: Source | null = Game.getObjectById<Source>(creep.memory.focus.id);
                     if (source) {
                         creep.memory.state = STATE_CLAIMING;
                         this.run(creep);
@@ -42,12 +42,12 @@ export abstract class Claimer extends CreepSuper {
                     break;
                 }
                 case STATE_CLAIMING: {
-                    const source: Source | null = Game.getObjectById(creep.memory.target.id);
+                    const source: Source | null = Game.getObjectById<Source>(creep.memory.focus.id);
                     if (source) {
                         if (source && creep.harvest(source) === ERR_NOT_IN_RANGE)
                             creep.moveTo(source, { visualizePathStyle: { stroke: "#FFFFF0" } });
-                    } else if (creep.memory.target) {
-                        const targetPos: RoomPosition | undefined | null = creep.memory.target.pos;
+                    } else if (creep.memory.focus) {
+                        const targetPos: RoomPosition | undefined | null = creep.memory.focus.pos;
                         if (targetPos) {
                             const exit: ExitConstant | ERR_NO_PATH | ERR_INVALID_ARGS = creep.room.findExitTo(
                                 targetPos.roomName,
@@ -56,7 +56,7 @@ export abstract class Claimer extends CreepSuper {
                                 const pos: RoomPosition | null = creep.pos.findClosestByPath(exit);
                                 if (pos) creep.moveTo(pos, { visualizePathStyle: { stroke: "#FFFFF0" } });
                             }
-                        } else console.log(creep.name + " pos not found : " + creep.memory.target);
+                        } else console.log(creep.name + " pos not found : " + creep.memory.focus);
                     } else {
                         creep.memory.state = STATE_IDLE;
                         this.run(creep);

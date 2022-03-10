@@ -2,7 +2,7 @@
 // memory extension samples
 interface CreepMemory {
     role: string;
-    target: any | null;
+    focus: any | null;
     spawn: StructureSpawn;
     pos: RoomPosition;
     state: CreepState;
@@ -39,7 +39,7 @@ interface Memory {
 
 declare namespace NodeJS {
     interface Global {
-        cmd: any;
+        cli: any;
 
         MINER_PER_SOURCE: number;
 
@@ -52,6 +52,7 @@ declare namespace NodeJS {
         STATE_REPAIRING: STATE_REPAIRING;
         STATE_WITHDRAW: STATE_WITHDRAW;
 
+        ROLE_POLY: ROLE_POLY;
         ROLE_LOGISTIC: ROLE_LOGISTIC;
         ROLE_CORE: ROLE_CORE;
         ROLE_MINER: ROLE_MINER;
@@ -70,7 +71,7 @@ declare namespace NodeJS {
 }
 
 // CONSTANTS
-declare const MINER_PER_SOURCE: 1;
+declare const MINER_PER_SOURCE: 3;
 
 declare const STATE_MINING: STATE_MINING;
 declare const STATE_CLAIMING: STATE_CLAIMING;
@@ -81,6 +82,7 @@ declare const STATE_DEPOSITE: STATE_DEPOSITE;
 declare const STATE_REPAIRING: STATE_REPAIRING;
 declare const STATE_WITHDRAW: STATE_WITHDRAW;
 
+declare const ROLE_POLY: ROLE_POLY;
 declare const ROLE_LOGISTIC: ROLE_LOGISTIC;
 declare const ROLE_CORE: ROLE_CORE;
 declare const ROLE_MINER: ROLE_MINER;
@@ -116,6 +118,7 @@ type STATE_REPAIRING = "repairing";
 type STATE_WITHDRAW = "withdraw";
 
 type CreepRole =
+    | ROLE_POLY
     | ROLE_LOGISTIC
     | ROLE_CORE
     | ROLE_MINER
@@ -131,6 +134,7 @@ type CreepRole =
     | ROLE_FIGHTER_POLY
     | ROLE_FIGHTER_SUPPORT;
 
+type ROLE_POLY = "poly";
 type ROLE_LOGISTIC = "logistic";
 type ROLE_CORE = "core";
 type ROLE_MINER = "miner";

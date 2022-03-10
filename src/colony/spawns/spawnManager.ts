@@ -1,14 +1,7 @@
+
 export class SpawnManager {
-    public static roles: string[] = [
-        ROLE_LOGISTIC,
-        ROLE_MINER,
-        ROLE_CARRIER,
-        ROLE_UPGRADER,
-        ROLE_REPAIRER,
-        ROLE_CLAIMER,
-        ROLE_SCOUT,
-    ];
-    public static targetCount: number[] = [1, 6, 8, 8, 1, 1, 0];
+    public static roles: string[] = [ROLE_POLY, ROLE_CARRIER];
+    public static targetCount: number[] = [10, 0];
     public static maxCount = 30;
 
     public static spawn(spawn: StructureSpawn): string {
@@ -18,52 +11,26 @@ export class SpawnManager {
             if (role) {
                 let bodyParts: BodyPartConstant[] = [WORK, CARRY, MOVE];
                 switch (role) {
+                    case ROLE_POLY:
+                        bodyParts = [WORK, WORK, WORK, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE];
+                        break;
                     case ROLE_MINER:
-                        bodyParts = [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE, MOVE];
+                        bodyParts = [WORK, WORK, MOVE];
+                        break;
+                    case ROLE_HARVESTER:
+                        bodyParts = [WORK, CARRY, MOVE];
                         break;
                     case ROLE_UPGRADER:
                         bodyParts = [
                             WORK,
-                            WORK,
-                            WORK,
                             CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
                             MOVE,
                         ];
                         break;
                     case ROLE_REPAIRER:
                         bodyParts = [
                             WORK,
-                            WORK,
-                            WORK,
                             CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
                             MOVE,
                         ];
                         break;
@@ -71,24 +38,6 @@ export class SpawnManager {
                         bodyParts = [
                             MOVE,
                             MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
                             CARRY,
                             CARRY,
                         ];
@@ -97,22 +46,6 @@ export class SpawnManager {
                         bodyParts = [
                             MOVE,
                             MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            MOVE,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
-                            CARRY,
                             CARRY,
                             CARRY,
                         ];
@@ -132,7 +65,7 @@ export class SpawnManager {
                 const name: string = this.getUnusedName(role);
                 output += spawn.spawnCreep(bodyParts, name, {
                     memory: {
-                        target: null,
+                        focus: null,
                         spawn,
                         role,
                         pos: spawn.pos,

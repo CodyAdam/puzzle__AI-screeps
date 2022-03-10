@@ -1,67 +1,61 @@
 import "utils/constants";
 
-import { Harvester } from "role/harvester";
-import { Upgrader } from "role/upgrader";
-// import { Builder } from "role/builder";
-// import { Carrier } from "role/carrier";
-// import { Claimer } from "role/claimer";
-// import { Logistic } from "role/logistic";
-// import { Miner } from "role/miner";
-// import { Repairer } from "role/repairer";
-// import { Scout } from "role/scout";
-import { MemoryManager } from "memoryManager";
-import { RoomPainter } from "roomPainter";
-import { SpawnManager } from "spawnManager";
+import { Harvester } from "colony/creeps/roles/harvester";
+import { Upgrader } from "colony/creeps/roles/upgrader";
+import { Builder } from "colony/creeps/roles/builder";
+import { Carrier } from "colony/creeps/roles/carrier";
+import { Claimer } from "colony/creeps/roles/claimer";
+import { Logistic } from "colony/creeps/roles/logistic";
+import { Miner } from "colony/creeps/roles/miner";
+import { Repairer } from "colony/creeps/roles/repairer";
+import { Poly } from "colony/creeps/roles/poly";
+import { Scout } from "colony/creeps/roles/scout";
+import { MemoryManager } from "utils/memory";
+import { RoomPainter } from "colony/roomPainter";
+import { SpawnManager } from "colony/spawns/spawnManager";
 import { ErrorMapper } from "utils/ErrorMapper";
 
-import cmd from "utils/commands";
+import cli from "utils/cli";
+import { defendRoom } from 'colony/towers/main';
 
-global.cmd = cmd;
+global.cli = cli;
 
 export const loop = ErrorMapper.wrapLoop(() => {
+
+    //   Loop :
+    //      Bucket Pixel
+    //      Update Colonies :
+    //          colony :
+    //              state
+    //              controller lvl
+    //              structure blueprint
+    //          towers :
+    //              Repair
+    //              Defend
+    //          spawns :
+    //              Spawning
+    //              Memory
+    //          creeps :
+    //              State
+    //              Say
+    //              Memory
+    //      rooms :
+    //          Draw Gizmos
+    //          Claim/Controller
+    //          ResetMem/Scan
+    //          Memory
+
+
     if (Game.cpu.bucket >= 10000) {
         Game.cpu.generatePixel();
     }
-
-    // console.log("############ Update Towers ");
-
-    // function defendRoom(room: Room) {
-    //     if (room) {
-    //         const hostiles = room.find(FIND_HOSTILE_CREEPS);
-    //         const towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
-    //         if (hostiles.length > 0) {
-    //             const username = hostiles[0].owner.username;
-    //             Game.notify(`User ${username} spotted in room ${room.name}`);
-    //             towers.forEach((tower: AnyOwnedStructure) => {
-    //                 if (tower.structureType === STRUCTURE_TOWER) tower.attack(hostiles[0]);
-    //             });
-    //         } else if (room.controller) {
-    //             const closestDamagedStructure: Structure | null = room.controller.pos.findClosestByRange(
-    //                 FIND_STRUCTURES,
-    //                 {
-    //                     filter: (structure: Structure) => {
-    //                         return (
-    //                             structure.hits < structure.hitsMax &&
-    //                             structure.structureType !== STRUCTURE_WALL &&
-    //                             structure.hits < 2000000
-    //                         );
-    //                     },
-    //                 },
-    //             );
-    //             if (closestDamagedStructure && towers[0]) {
-    //                 if (towers[0].structureType === STRUCTURE_TOWER && closestDamagedStructure)
-    //                     towers[0].repair(closestDamagedStructure);
-    //             }
-    //         }
-    //     }
-    // }
 
     console.log("############ Update Rooms ");
 
     for (const roomName in Memory.rooms) {
         const room: Room = Game.rooms[roomName];
         if (room) {
-            // defendRoom(room);
+            defendRoom(room);
             MemoryManager.updateRoom(room);
         }
     }
@@ -77,40 +71,42 @@ export const loop = ErrorMapper.wrapLoop(() => {
     console.log("############ Update Spawns ");
 
     const spawn: StructureSpawn | null = Game.spawns.B1S1;
-    if (spawn) SpawnManager.spawn(spawn);
+    if (spawn) console.log(SpawnManager.spawn(spawn));
 
     console.log("############ Update Creeps ");
 
     for (const name in Game.creeps) {
-        const creep = Game.creeps[name];
-        console.log("### " + creep.name);
-
+        const creep: Creep = Game.creeps[name];
+        console.log("## " + creep.name + " : " + creep.memory.role);
+        if (creep.memory.role === ROLE_POLY) {
+            Poly.run(creep);
+        }
         if (creep.memory.role === ROLE_HARVESTER) {
             Harvester.run(creep);
         }
         if (creep.memory.role === ROLE_UPGRADER) {
             Upgrader.run(creep);
         }
-        // if (creep.memory.role === ROLE_BUILDER) {
-        //     Builder.run(creep);
-        // }
-        // if (creep.memory.role === ROLE_REPAIRER) {
-        //     Repairer.run(creep);
-        // }
-        // if (creep.memory.role === ROLE_MINER) {
-        //     Miner.run(creep);
-        // }
-        // if (creep.memory.role === ROLE_CARRIER) {
-        //     Carrier.run(creep);
-        // }
-        // if (creep.memory.role === ROLE_CLAIMER) {
-        //     Claimer.run(creep);
-        // }
-        // if (creep.memory.role === ROLE_SCOUT) {
-        //     Scout.run(creep);
-        // }
-        // if (creep.memory.role === ROLE_LOGISTIC) {
-        //     Logistic.run(creep);
-        // }
+        if (creep.memory.role === ROLE_BUILDER) {
+            Builder.run(creep);
+        }
+        if (creep.memory.role === ROLE_REPAIRER) {
+            Repairer.run(creep);
+        }
+        if (creep.memory.role === ROLE_MINER) {
+            Miner.run(creep);
+        }
+        if (creep.memory.role === ROLE_CARRIER) {
+            Carrier.run(creep);
+        }
+        if (creep.memory.role === ROLE_CLAIMER) {
+            Claimer.run(creep);
+        }
+        if (creep.memory.role === ROLE_SCOUT) {
+            Scout.run(creep);
+        }
+        if (creep.memory.role === ROLE_LOGISTIC) {
+            Logistic.run(creep);
+        }
     }
 });

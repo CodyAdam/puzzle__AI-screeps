@@ -1,4 +1,4 @@
-import { CreepSuper } from "./creepSuper";
+import { CreepSuper } from "../creepSuper";
 
 export abstract class Carrier extends CreepSuper {
     public static role: CreepRole = ROLE_CARRIER;
@@ -27,7 +27,7 @@ export abstract class Carrier extends CreepSuper {
                 } else {
                     // HAS SOME SLOT FREE
                     let target: Resource | StructureContainer | null;
-                    if (creep.memory.target) target = Game.getObjectById(creep.memory.target);
+                    if (creep.memory.focus) target = Game.getObjectById<Resource | StructureContainer>(creep.memory.focus);
                     else {
                         const dropped: Resource | null = this.getDroppedResource(creep);
                         const container: StructureContainer | null = this.getContainer(creep);
@@ -41,7 +41,7 @@ export abstract class Carrier extends CreepSuper {
                     }
                     if (target) {
                         // THERE IS THING ON THE GROUND
-                        creep.memory.target = target.id;
+                        creep.memory.focus = target.id;
                         if (target instanceof StructureContainer) {
                             creep.say("📦" + target.store.getUsedCapacity().toString());
                             const minValue: number =
@@ -50,16 +50,16 @@ export abstract class Carrier extends CreepSuper {
                                     : creep.store.getFreeCapacity();
                             if (creep.withdraw(target, RESOURCE_ENERGY, minValue) === ERR_NOT_IN_RANGE)
                                 creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
-                            else creep.memory.target = null;
+                            else creep.memory.focus = null;
                         } else {
                             creep.say("🔍" + target.amount.toString());
                             if (creep.pickup(target) === ERR_NOT_IN_RANGE)
                                 creep.moveTo(target, { visualizePathStyle: { stroke: "#ffaa00" } });
-                            else creep.memory.target = null;
+                            else creep.memory.focus = null;
                         }
                     } else {
                         // NOTHING FOUND
-                        creep.memory.target = null;
+                        creep.memory.focus = null;
                         creep.memory.state = STATE_DEPOSITE;
                         this.run(creep);
                     }
@@ -99,7 +99,7 @@ export abstract class Carrier extends CreepSuper {
                     filter: (resource: Resource) => {
                         let alreadyCollected = 0;
                         _.forEach(Game.creeps, (subcreep: Creep) => {
-                            if (subcreep.memory.target === resource.id)
+                            if (subcreep.memory.focus === resource.id)
                                 alreadyCollected += subcreep.store.getFreeCapacity();
                         });
                         return resource.amount - alreadyCollected >= creep.store.getFreeCapacity() - 100;
@@ -119,7 +119,7 @@ export abstract class Carrier extends CreepSuper {
                 if (structure.structureType === STRUCTURE_CONTAINER) {
                     let alreadyCollected = 0;
                     _.forEach(Game.creeps, (subcreep: Creep) => {
-                        if (subcreep.memory.target === structure.id)
+                        if (subcreep.memory.focus === structure.id)
                             alreadyCollected += subcreep.store.getFreeCapacity();
                     });
                     return structure.store.getUsedCapacity() - alreadyCollected >= creep.store.getFreeCapacity() - 100;

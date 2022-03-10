@@ -1,9 +1,10 @@
 import { Builder } from "./builder";
-import { CreepSuper } from "./creepSuper";
+import { CreepSuper } from "../creepSuper";
 
 export abstract class Upgrader extends CreepSuper {
     public static role: CreepRole = ROLE_UPGRADER;
     public static run(creep: Creep): ScreepsReturnCode {
+        super.run(creep);
         if (Builder.getConstructionSite()) {
             creep.memory.role = "builder";
             return OK;

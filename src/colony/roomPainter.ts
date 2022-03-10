@@ -1,5 +1,5 @@
-import { B } from "blueprint/B";
-import { SpawnManager } from "spawnManager";
+import { B } from "colony/structures/blueprint/B";
+import { SpawnManager } from "colony/spawns/spawnManager";
 
 export class RoomPainter {
     public static drawAll(): ScreepsReturnCode {

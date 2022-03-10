@@ -1,4 +1,4 @@
-import { CreepSuper } from "./creepSuper";
+import { CreepSuper } from "../creepSuper";
 
 export abstract class Builder extends CreepSuper {
     public static role: CreepRole = ROLE_BUILDER;
@@ -19,8 +19,8 @@ export abstract class Builder extends CreepSuper {
                         // there is things to do
                         creep.memory.state = STATE_BUILDING;
                         this.run(creep);
-                    } // nothing to do
-                    creep.memory.role = "upgrader";
+                    } else  // nothing to do
+                        creep.memory.role = "upgrader";
                 }
                 break;
             case STATE_WITHDRAW:

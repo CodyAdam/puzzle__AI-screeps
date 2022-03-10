@@ -1,24 +1,24 @@
-import { CreepSuper } from "./creepSuper";
+import { CreepSuper } from "../creepSuper";
 
 export abstract class Miner extends CreepSuper {
     public static role: CreepRole = ROLE_MINER;
     public static run(creep: Creep): ScreepsReturnCode {
         super.run(creep);
-        if (!creep.memory.target) {
+        if (!creep.memory.focus) {
             const sourceMem: SourceMemory | null = this.getAvailableSourceMem();
             if (sourceMem) {
-                creep.memory.target = sourceMem;
+                creep.memory.focus = sourceMem;
                 creep.memory.state = STATE_MINING;
             } else creep.memory.state = STATE_IDLE;
         } else {
             switch (creep.memory.state) {
                 case STATE_MINING: {
-                    const source: Source | null = Game.getObjectById<Source>(creep.memory.target.id);
+                    const source: Source | null = Game.getObjectById<Source>(creep.memory.focus.id);
                     if (source) {
                         if (source && creep.harvest(source) === ERR_NOT_IN_RANGE)
                             creep.moveTo(source, { visualizePathStyle: { stroke: "#FFFFF0" } });
-                    } else if (creep.memory.target) {
-                        const targetPos: RoomPosition | undefined | null = creep.memory.target.pos;
+                    } else if (creep.memory.focus) {
+                        const targetPos: RoomPosition | undefined | null = creep.memory.focus.pos;
                         if (targetPos) {
                             const exit: ExitConstant | ERR_NO_PATH | ERR_INVALID_ARGS = creep.room.findExitTo(
                                 targetPos.roomName,
@@ -27,7 +27,7 @@ export abstract class Miner extends CreepSuper {
                                 const pos: RoomPosition | null = creep.pos.findClosestByPath(exit);
                                 if (pos) creep.moveTo(pos, { visualizePathStyle: { stroke: "#FFFFF0" } });
                             }
-                        } else console.log(creep.name + " pos not found : " + creep.memory.target.pos.toString());
+                        } else console.log(creep.name + " pos not found : " + creep.memory.focus.pos.toString());
                     } else {
                         creep.memory.state = STATE_IDLE;
                         this.run(creep);
@@ -35,7 +35,7 @@ export abstract class Miner extends CreepSuper {
                     break;
                 }
                 case STATE_IDLE: {
-                    const source: Source | null = Game.getObjectById<Source>(creep.memory.target.id);
+                    const source: Source | null = Game.getObjectById<Source>(creep.memory.focus.id);
                     if (source) {
                         creep.memory.state = STATE_MINING;
                         this.run(creep);

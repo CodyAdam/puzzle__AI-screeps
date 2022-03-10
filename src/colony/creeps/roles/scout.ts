@@ -1,15 +1,15 @@
-import { CreepSuper } from "./creepSuper";
+import { CreepSuper } from "../creepSuper";
 
 export abstract class Scout extends CreepSuper {
     public static role: CreepRole = ROLE_SCOUT;
     public static run(creep: Creep): ScreepsReturnCode {
         super.run(creep);
 
-        if (!creep.memory.target) {
-            creep.memory.target = { tick: 0, flagTick: 0 };
+        if (!creep.memory.focus) {
+            creep.memory.focus = { tick: 0, flagTick: 0 };
             this.run(creep);
         } else {
-            creep.say(this.rickRoll(creep.memory.target.tick), true);
+            creep.say(this.rickRoll(creep.memory.focus.tick), true);
             this.incrementTick(creep);
             this.move(creep);
         }
@@ -21,33 +21,33 @@ export abstract class Scout extends CreepSuper {
     }
 
     public static incrementTick(creep: Creep): void {
-        if (creep.memory.target) {
-            const creepMem = creep.memory.target;
+        if (creep.memory.focus) {
+            const creepMem = creep.memory.focus;
             creepMem.tick += 1;
-            creep.memory.target = creepMem;
+            creep.memory.focus = creepMem;
         }
     }
 
     public static move(creep: Creep): void {
         let flagsRoute: Flag[] = _.filter(Game.flags, (flag: Flag) => {
-            return flag.name.toLowerCase().includes(creep.memory.target.arrived ? "mesloop" : "mespath");
+            return flag.name.toLowerCase().includes(creep.memory.focus.arrived ? "mesloop" : "mespath");
         });
-        if (!creep.memory.target.arrived && creep.memory.target.flagTick >= flagsRoute.length - 1) {
-            const creepMem = creep.memory.target;
+        if (!creep.memory.focus.arrived && creep.memory.focus.flagTick >= flagsRoute.length - 1) {
+            const creepMem = creep.memory.focus;
             creepMem.arrived = true;
-            creep.memory.target = creepMem;
+            creep.memory.focus = creepMem;
         }
         flagsRoute = _.sortBy(flagsRoute, (flag: Flag) => {
             return flag.name;
         });
-        if (flagsRoute.length && creep.memory.target.flagTick !== undefined && creep.memory.target.flagTick != null) {
-            const target: RoomPosition = flagsRoute[creep.memory.target.flagTick % flagsRoute.length].pos;
+        if (flagsRoute.length && creep.memory.focus.flagTick !== undefined && creep.memory.focus.flagTick != null) {
+            const target: RoomPosition = flagsRoute[creep.memory.focus.flagTick % flagsRoute.length].pos;
             if (target.x === creep.pos.x && target.y === creep.pos.y && target.roomName === creep.pos.roomName) {
-                const creepMem = creep.memory.target;
+                const creepMem = creep.memory.focus;
                 creepMem.flagTick += 1;
-                creep.memory.target = creepMem;
+                creep.memory.focus = creepMem;
             }
-            creep.moveTo(flagsRoute[creep.memory.target.flagTick % flagsRoute.length], {
+            creep.moveTo(flagsRoute[creep.memory.focus.flagTick % flagsRoute.length], {
                 visualizePathStyle: { stroke: "#fcf803" },
             });
         }

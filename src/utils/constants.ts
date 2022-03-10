@@ -1,5 +1,5 @@
 //Constants
-global.MINER_PER_SOURCE = 1;
+global.MINER_PER_SOURCE = 4;
 
 global.STATE_MINING = "mining";
 global.STATE_CLAIMING = "claiming";
@@ -10,6 +10,7 @@ global.STATE_REPAIRING = "repairing";
 global.STATE_DEPOSITE = "deposite";
 global.STATE_WITHDRAW = "withdraw";
 
+global.ROLE_POLY = "poly";
 global.ROLE_LOGISTIC = "logistic";
 global.ROLE_CORE = "core";
 global.ROLE_MINER = "miner";

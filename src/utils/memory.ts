@@ -1,5 +1,5 @@
-import { CreepSuper } from "role/creepSuper";
-import { Miner } from "role/miner";
+import { CreepSuper } from "colony/creeps/creepSuper";
+import { Miner } from "colony/creeps/roles/miner";
 
 export class MemoryManager {
     public static cleanAllMemory(): ScreepsReturnCode {
@@ -41,7 +41,7 @@ export class MemoryManager {
         } = {};
         room.find(FIND_SOURCES).forEach((source) => {
             const miners: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
-                return creep.memory.role === "miner" && creep.memory.target && creep.memory.target.id === source.id;
+                return creep.memory.role === "poly" && creep.memory.focus && creep.memory.focus.id === source.id;
             });
             const minersId: Id<Creep>[] = miners.map((creep: Creep) => {
                 return creep.id;
@@ -56,9 +56,9 @@ export class MemoryManager {
         const claimers: Creep[] = _.filter(Game.creeps, (creep: Creep) => {
             return (
                 creep.memory.role === "claimer" &&
-                creep.memory.target &&
+                creep.memory.focus &&
                 room.controller &&
-                creep.memory.target.id === room.controller.id
+                creep.memory.focus.id === room.controller.id
             );
         });
         const claimersId: Id<Creep>[] = claimers.map((creep: Creep) => {

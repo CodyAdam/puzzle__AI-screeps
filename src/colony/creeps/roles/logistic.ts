@@ -1,4 +1,4 @@
-import { CreepSuper } from "./creepSuper";
+import { CreepSuper } from "../creepSuper";
 
 export abstract class Logistic extends CreepSuper {
     public static role: CreepRole = ROLE_LOGISTIC;

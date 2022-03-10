@@ -8,10 +8,10 @@ export abstract class CreepSuper {
         return OK;
     }
     public static sleep(creep: Creep): ScreepsReturnCode {
-        const restPoint = Game.flags.rest.pos;
+        const restPoint = Game.flags.rest;
         if (restPoint) {
             creep.say("💤");
-            creep.moveTo(restPoint, { visualizePathStyle: { stroke: "#00C8E180" } });
+            creep.moveTo(restPoint.pos, { visualizePathStyle: { stroke: "#00C8E180" } });
             return OK;
         }
         return ERR_NOT_FOUND;
@@ -96,15 +96,15 @@ export abstract class CreepSuper {
 
         const targets = tombstones.length
             ? _.sortBy(tombstones, (structure: RoomObject) => {
-                  return creep.pos.findPathTo(structure).length;
-              })
+                return creep.pos.findPathTo(structure).length;
+            })
             : ruins.length
-            ? _.sortBy(ruins, (structure: RoomObject) => {
-                  return creep.pos.findPathTo(structure).length;
-              })
-            : _.sortBy(storables, (structure: RoomObject) => {
-                  return creep.pos.findPathTo(structure).length;
-              });
+                ? _.sortBy(ruins, (structure: RoomObject) => {
+                    return creep.pos.findPathTo(structure).length;
+                })
+                : _.sortBy(storables, (structure: RoomObject) => {
+                    return creep.pos.findPathTo(structure).length;
+                });
         if (
             targets &&
             (targets[0] instanceof StructureContainer ||

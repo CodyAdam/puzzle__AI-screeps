@@ -1,6 +1,6 @@
-import { MemoryManager } from "../memoryManager";
+import { MemoryManager } from "./memory";
 
-const cmd = {
+const cli = {
     initSpawn: (spawnName: string): ScreepsReturnCode => {
         return MemoryManager.updateSpawn(Game.spawns[spawnName]);
     },
@@ -38,7 +38,7 @@ const cmd = {
         if (spawn.room.energyAvailable < cost) return ERR_NOT_ENOUGH_ENERGY;
         return spawn.spawnCreep(bodyParts, name, {
             memory: {
-                target: null,
+                focus: null,
                 spawn,
                 role,
                 pos: spawn.pos,
@@ -57,4 +57,4 @@ const cmd = {
     },
 };
 
-export default cmd;
+export default cli;
