@@ -16,7 +16,7 @@ export abstract class Poly extends CreepSuper {
           }
           if (creep.memory.focus) {
             const source: Source | null = Game.getObjectById<Source>(creep.memory.focus.id)
-            if (source) {
+            if (source && source.energy) {
               if (source && creep.harvest(source) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
               }
@@ -37,10 +37,12 @@ export abstract class Poly extends CreepSuper {
             this.run(creep);
             break;
           }
-          let constructionSite = Game.rooms["E8S57"].find(FIND_CONSTRUCTION_SITES);
-          console.log(constructionSite[0]);
+          const constructionSite = _.sortBy(Game.rooms["E8S57"].find(FIND_CONSTRUCTION_SITES), s => creep.pos.getRangeTo(s.pos));
 
-          if (constructionSite[0]) {
+
+
+
+          if (constructionSite.length) {
             if (creep.build(constructionSite[0]) === ERR_NOT_IN_RANGE)
               creep.moveTo(constructionSite[0].pos, { visualizePathStyle: { stroke: "#ffaa00" } });
           } else {
@@ -90,7 +92,8 @@ export abstract class Poly extends CreepSuper {
       const roomMem: RoomMemory = Memory.rooms[roomName];
       for (const sourcesId in roomMem.sources) {
         const sourceMem = roomMem.sources[sourcesId];
-        if (sourceMem.minersId.length < MINER_PER_SOURCE) return sourceMem;
+        const source = Game.getObjectById(sourceMem.id)
+        if (source && sourceMem.minersId.length < MINER_PER_SOURCE && source.energy) return sourceMem;
       }
     }
     return null;

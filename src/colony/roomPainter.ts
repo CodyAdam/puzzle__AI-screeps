@@ -72,7 +72,7 @@ export class RoomPainter {
             spawn.room.visual.text(
                 roles[i] + "  : " + count.toString() + "/" + targetCount[i].toString() + " " + icon,
                 spawn.pos.x - 2,
-                spawn.pos.y + i,
+                spawn.pos.y + i - 9,
                 { align: "right", opacity: 0.3 },
             );
         }
@@ -81,7 +81,7 @@ export class RoomPainter {
         spawn.room.visual.text(
             "creeps  : " + totalCount.toString() + "/" + SpawnManager.maxCount.toString() + " " + totalIcon,
             spawn.pos.x - 2,
-            spawn.pos.y + roles.length + 1,
+            spawn.pos.y + roles.length + 1 - 9,
             { align: "right", opacity: 0.3 },
         );
         return OK;
